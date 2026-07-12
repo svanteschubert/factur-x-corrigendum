@@ -11,16 +11,16 @@ Factur-X 1.09 EXTENDED `LineStatusReasonCode` regression and its correction.
   It never modifies examples, XSD, code lists, documentation, or other
   release files.
 
-## Regression demonstration on `master`
+## Regression demonstration on `fix`
 
 ```sh
 mvn clean install
 ```
 
-This command is expected to fail. It regenerates XSLT only below `target/` and
-tests the unchanged original ZF25 DE validator against the official X20
-EXTENDED example, which has `GROUP` lines. The three false BT-131 tax-base
-assertions from the bug report therefore fail the regression test.
+This command succeeds. It regenerates the validators below `target/`, copies
+only the 25 generated release XSLT files into their existing release folders,
+and validates the official X20 EXTENDED example with `GROUP` lines without the
+three false BT-131 tax-base assertions described in the bug report.
 
 ## Regenerate the corrigendum
 
@@ -29,16 +29,14 @@ Schematron-to-XSLT conversion mechanism used by eInvoicing-EN16931.
 
 ```sh
 mvn generate-resources
-./regenerate-releases.sh
 ```
 
-The first command creates 25 release-specific validators and five corrected
+The Maven phase creates 25 release-specific validators and five corrected
 EXTENDED overrides in `target/generated-xslt/`, mirroring the five original
-release directories. The second command installs only the generated XSLT files
-in their corresponding profile directories under
-`src/test/resources/releases/`; it does not traverse example directories.
-`target/` is an ignored intermediate directory and is not part of either
-release state.
+release directories. On this branch the platform-independent Maven Ant task
+then copies only those 25 generated `.xsl`/`.xslt` files into their
+corresponding profile directories. Schematron files and examples are excluded.
+`target/` remains an ignored intermediate directory.
 
 The Maven coordinates are `com.schubert-consulting.factur-x:factur-x-corrigendum`.
 

@@ -167,6 +167,51 @@
           </execution>
         </executions>
       </plugin>
+
+      <!-- Platform-independent installation of generated validators on fix. -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>3.1.0</version>
+        <executions>
+          <execution>
+            <id>install-regenerated-xslt-into-releases</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <target name="install-regenerated-xslt-into-releases">
+                <copy file="${project.build.directory}/generated-xslt/ZF25_DE/Schema/0_Factur-X_1.09_MINIMUM/Factur-X_1.09_MINIMUM.xslt" tofile="${release.resources.dir}/ZF25_DE/Schema/0_Factur-X_1.09_MINIMUM/_XSLT_MINIMUM/FACTUR-X_MINIMUM.xslt" />
+                <copy file="${project.build.directory}/generated-xslt/ZF25_DE/Schema/1_Factur-X_1.09_BASICWL/Factur-X_1.09_BASICWL.xslt" tofile="${release.resources.dir}/ZF25_DE/Schema/1_Factur-X_1.09_BASICWL/_XSLT_BASIC-WL/FACTUR-X_BASIC-WL.xslt" />
+                <copy file="${project.build.directory}/generated-xslt/ZF25_DE/Schema/2_Factur-X_1.09_BASIC/Factur-X_1.09_BASIC.xslt" tofile="${release.resources.dir}/ZF25_DE/Schema/2_Factur-X_1.09_BASIC/_XSLT_BASIC/FACTUR-X_BASIC.xslt" />
+                <copy file="${project.build.directory}/generated-xslt/ZF25_DE/Schema/3_Factur-X_1.09_EN16931/Factur-X_1.09_EN16931.xslt" tofile="${release.resources.dir}/ZF25_DE/Schema/3_Factur-X_1.09_EN16931/_XSLT_EN16931/FACTUR-X_EN16931.xslt" />
+                <copy file="${project.build.directory}/generated-xslt/ZF25_DE/Schema/4_Factur-X_1.09_EXTENDED/FACTUR-X_EXTENDED.xslt" tofile="${release.resources.dir}/ZF25_DE/Schema/4_Factur-X_1.09_EXTENDED/_XSLT_EXTENDED/FACTUR-X_EXTENDED.xslt" />
+                <copy file="${project.build.directory}/generated-xslt/ZF25_EN/Schema/0_Factur-X_1.09_MINIMUM/Factur-X_1.09_MINIMUM.xslt" tofile="${release.resources.dir}/ZF25_EN/Schema/0_Factur-X_1.09_MINIMUM/_XSLT_MINIMUM/FACTUR-X_MINIMUM.xslt" />
+                <copy file="${project.build.directory}/generated-xslt/ZF25_EN/Schema/1_Factur-X_1.09_BASICWL/Factur-X_1.09_BASICWL.xslt" tofile="${release.resources.dir}/ZF25_EN/Schema/1_Factur-X_1.09_BASICWL/_XSLT_BASIC-WL/FACTUR-X_BASIC-WL.xslt" />
+                <copy file="${project.build.directory}/generated-xslt/ZF25_EN/Schema/2_Factur-X_1.09_BASIC/Factur-X_1.09_BASIC.xslt" tofile="${release.resources.dir}/ZF25_EN/Schema/2_Factur-X_1.09_BASIC/_XSLT_BASIC/FACTUR-X_BASIC.xslt" />
+                <copy file="${project.build.directory}/generated-xslt/ZF25_EN/Schema/3_Factur-X_1.09_EN16931/Factur-X_1.09_EN16931.xslt" tofile="${release.resources.dir}/ZF25_EN/Schema/3_Factur-X_1.09_EN16931/_XSLT_EN16931/FACTUR-X_EN16931.xslt" />
+                <copy file="${project.build.directory}/generated-xslt/ZF25_EN/Schema/4_Factur-X_1.09_EXTENDED/FACTUR-X_EXTENDED.xslt" tofile="${release.resources.dir}/ZF25_EN/Schema/4_Factur-X_1.09_EXTENDED/_XSLT_EXTENDED/FACTUR-X_EXTENDED.xslt" />
+                <copy file="${project.build.directory}/generated-xslt/_Factur-X 1.09 Zugferd 2.5 - 2026 06 10 - FINAL DE/4. FACTUR-X_1.09_XSD_SCHEMATRON_2026-06-10/0. Factur-X_1.09_MINIMUM/Factur-X_1.09_MINIMUM.xslt" tofile="${release.resources.dir}/_Factur-X 1.09 Zugferd 2.5 - 2026 06 10 - FINAL DE/4. FACTUR-X_1.09_XSD_SCHEMATRON_2026-06-10/0. Factur-X_1.09_MINIMUM/_XSLT_MINIMUM/FACTUR-X_MINIMUM.xslt" />
+                <copy file="${project.build.directory}/generated-xslt/_Factur-X 1.09 Zugferd 2.5 - 2026 06 10 - FINAL DE/4. FACTUR-X_1.09_XSD_SCHEMATRON_2026-06-10/1. Factur-X_1.09_BASICWL/Factur-X_1.09_BASICWL.xslt" tofile="${release.resources.dir}/_Factur-X 1.09 Zugferd 2.5 - 2026 06 10 - FINAL DE/4. FACTUR-X_1.09_XSD_SCHEMATRON_2026-06-10/1. Factur-X_1.09_BASICWL/_XSLT_BASICWL/FACTUR-X_BASIC-WL.xslt" />
+                <copy file="${project.build.directory}/generated-xslt/_Factur-X 1.09 Zugferd 2.5 - 2026 06 10 - FINAL DE/4. FACTUR-X_1.09_XSD_SCHEMATRON_2026-06-10/2. Factur-X_1.09_BASIC/Factur-X_1.09_BASIC.xslt" tofile="${release.resources.dir}/_Factur-X 1.09 Zugferd 2.5 - 2026 06 10 - FINAL DE/4. FACTUR-X_1.09_XSD_SCHEMATRON_2026-06-10/2. Factur-X_1.09_BASIC/_XSLT_BASIC/FACTUR-X_BASIC.xslt" />
+                <copy file="${project.build.directory}/generated-xslt/_Factur-X 1.09 Zugferd 2.5 - 2026 06 10 - FINAL DE/4. FACTUR-X_1.09_XSD_SCHEMATRON_2026-06-10/3. Factur-X_1.09_EN16931/Factur-X_1.09_EN16931.xslt" tofile="${release.resources.dir}/_Factur-X 1.09 Zugferd 2.5 - 2026 06 10 - FINAL DE/4. FACTUR-X_1.09_XSD_SCHEMATRON_2026-06-10/3. Factur-X_1.09_EN16931/_XSLT_EN16931/FACTUR-X_EN16931.xslt" />
+                <copy file="${project.build.directory}/generated-xslt/_Factur-X 1.09 Zugferd 2.5 - 2026 06 10 - FINAL DE/4. FACTUR-X_1.09_XSD_SCHEMATRON_2026-06-10/4. Factur-X_1.09_EXTENDED/FACTUR-X_EXTENDED.xslt" tofile="${release.resources.dir}/_Factur-X 1.09 Zugferd 2.5 - 2026 06 10 - FINAL DE/4. FACTUR-X_1.09_XSD_SCHEMATRON_2026-06-10/4. Factur-X_1.09_EXTENDED/_XSLT_EXTENDED/Factur-X_EXTENDED.xsl" />
+                <copy file="${project.build.directory}/generated-xslt/_Factur-X 1.09 Zugferd 2.5 - 2026 06 10 - FINAL EN/4. FACTUR-X_1.09_XSD_SCHEMATRON_2026-06-10/0. Factur-X_1.09_MINIMUM/Factur-X_1.09_MINIMUM.xslt" tofile="${release.resources.dir}/_Factur-X 1.09 Zugferd 2.5 - 2026 06 10 - FINAL EN/4. FACTUR-X_1.09_XSD_SCHEMATRON_2026-06-10/0. Factur-X_1.09_MINIMUM/_XSLT_MINIMUM/FACTUR-X_MINIMUM.xslt" />
+                <copy file="${project.build.directory}/generated-xslt/_Factur-X 1.09 Zugferd 2.5 - 2026 06 10 - FINAL EN/4. FACTUR-X_1.09_XSD_SCHEMATRON_2026-06-10/1. Factur-X_1.09_BASICWL/Factur-X_1.09_BASICWL.xslt" tofile="${release.resources.dir}/_Factur-X 1.09 Zugferd 2.5 - 2026 06 10 - FINAL EN/4. FACTUR-X_1.09_XSD_SCHEMATRON_2026-06-10/1. Factur-X_1.09_BASICWL/_XSLT_BASICWL/FACTUR-X_BASIC-WL.xslt" />
+                <copy file="${project.build.directory}/generated-xslt/_Factur-X 1.09 Zugferd 2.5 - 2026 06 10 - FINAL EN/4. FACTUR-X_1.09_XSD_SCHEMATRON_2026-06-10/2. Factur-X_1.09_BASIC/Factur-X_1.09_BASIC.xslt" tofile="${release.resources.dir}/_Factur-X 1.09 Zugferd 2.5 - 2026 06 10 - FINAL EN/4. FACTUR-X_1.09_XSD_SCHEMATRON_2026-06-10/2. Factur-X_1.09_BASIC/_XSLT_BASIC/FACTUR-X_BASIC.xslt" />
+                <copy file="${project.build.directory}/generated-xslt/_Factur-X 1.09 Zugferd 2.5 - 2026 06 10 - FINAL EN/4. FACTUR-X_1.09_XSD_SCHEMATRON_2026-06-10/3. Factur-X_1.09_EN16931/Factur-X_1.09_EN16931.xslt" tofile="${release.resources.dir}/_Factur-X 1.09 Zugferd 2.5 - 2026 06 10 - FINAL EN/4. FACTUR-X_1.09_XSD_SCHEMATRON_2026-06-10/3. Factur-X_1.09_EN16931/_XSLT_EN16931/FACTUR-X_EN16931.xslt" />
+                <copy file="${project.build.directory}/generated-xslt/_Factur-X 1.09 Zugferd 2.5 - 2026 06 10 - FINAL EN/4. FACTUR-X_1.09_XSD_SCHEMATRON_2026-06-10/4. Factur-X_1.09_EXTENDED/FACTUR-X_EXTENDED.xslt" tofile="${release.resources.dir}/_Factur-X 1.09 Zugferd 2.5 - 2026 06 10 - FINAL EN/4. FACTUR-X_1.09_XSD_SCHEMATRON_2026-06-10/4. Factur-X_1.09_EXTENDED/_XSLT_EXTENDED/Factur-X_EXTENDED.xsl" />
+                <copy file="${project.build.directory}/generated-xslt/_Factur-X 1.09 Zugferd 2.5 - 2026 06 10 - FINAL FR/4. FACTUR-X_1.09_XSD_SCHEMATRON_2026-06-10/0. Factur-X_1.09_MINIMUM/Factur-X_1.09_MINIMUM.xslt" tofile="${release.resources.dir}/_Factur-X 1.09 Zugferd 2.5 - 2026 06 10 - FINAL FR/4. FACTUR-X_1.09_XSD_SCHEMATRON_2026-06-10/0. Factur-X_1.09_MINIMUM/_XSLT_MINIMUM/FACTUR-X_MINIMUM.xslt" />
+                <copy file="${project.build.directory}/generated-xslt/_Factur-X 1.09 Zugferd 2.5 - 2026 06 10 - FINAL FR/4. FACTUR-X_1.09_XSD_SCHEMATRON_2026-06-10/1. Factur-X_1.09_BASICWL/Factur-X_1.09_BASICWL.xslt" tofile="${release.resources.dir}/_Factur-X 1.09 Zugferd 2.5 - 2026 06 10 - FINAL FR/4. FACTUR-X_1.09_XSD_SCHEMATRON_2026-06-10/1. Factur-X_1.09_BASICWL/_XSLT_BASICWL/FACTUR-X_BASIC-WL.xslt" />
+                <copy file="${project.build.directory}/generated-xslt/_Factur-X 1.09 Zugferd 2.5 - 2026 06 10 - FINAL FR/4. FACTUR-X_1.09_XSD_SCHEMATRON_2026-06-10/2. Factur-X_1.09_BASIC/Factur-X_1.09_BASIC.xslt" tofile="${release.resources.dir}/_Factur-X 1.09 Zugferd 2.5 - 2026 06 10 - FINAL FR/4. FACTUR-X_1.09_XSD_SCHEMATRON_2026-06-10/2. Factur-X_1.09_BASIC/_XSLT_BASIC/FACTUR-X_BASIC.xslt" />
+                <copy file="${project.build.directory}/generated-xslt/_Factur-X 1.09 Zugferd 2.5 - 2026 06 10 - FINAL FR/4. FACTUR-X_1.09_XSD_SCHEMATRON_2026-06-10/3. Factur-X_1.09_EN16931/Factur-X_1.09_EN16931.xslt" tofile="${release.resources.dir}/_Factur-X 1.09 Zugferd 2.5 - 2026 06 10 - FINAL FR/4. FACTUR-X_1.09_XSD_SCHEMATRON_2026-06-10/3. Factur-X_1.09_EN16931/_XSLT_EN16931/FACTUR-X_EN16931.xslt" />
+                <copy file="${project.build.directory}/generated-xslt/_Factur-X 1.09 Zugferd 2.5 - 2026 06 10 - FINAL FR/4. FACTUR-X_1.09_XSD_SCHEMATRON_2026-06-10/4. Factur-X_1.09_EXTENDED/FACTUR-X_EXTENDED.xslt" tofile="${release.resources.dir}/_Factur-X 1.09 Zugferd 2.5 - 2026 06 10 - FINAL FR/4. FACTUR-X_1.09_XSD_SCHEMATRON_2026-06-10/4. Factur-X_1.09_EXTENDED/_XSLT_EXTENDED/Factur-X_EXTENDED.xsl" />
+              </target>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
 </project>
