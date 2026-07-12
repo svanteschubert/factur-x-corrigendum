@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.schubert-consulting.factur-x</groupId>
+  <artifactId>factur-x-corrigendum</artifactId>
+  <version>1.09-2.5-corrigendum-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>Factur-X 1.09 / ZUGFeRD 2.5 Corrigendum</name>
+  <description>Reproducible Schematron-to-XSLT regeneration for the Factur-X 1.09 EXTENDED corrigendum.</description>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.release>17</maven.compiler.release>
+    <ph.schematron.plugin.version>9.0.1</ph.schematron.plugin.version>
+    <release.resources.dir>${project.basedir}/src/test/resources/releases</release.resources.dir>
+    <corrected.extended.source.dir>${project.basedir}/src/test/resources/corrigendum</corrected.extended.source.dir>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>net.sf.saxon</groupId>
+      <artifactId>Saxon-HE</artifactId>
+      <version>12.8</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>5.13.4</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.14.1</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.5.5</version>
+      </plugin>
+      <!-- This is the same Schematron-to-XSLT Maven plugin workflow used by eInvoicing-EN16931. -->
+      <plugin>
+        <groupId>com.helger.maven</groupId>
+        <artifactId>ph-schematron-maven-plugin</artifactId>
+        <version>${ph.schematron.plugin.version}</version>
+        <executions>
+          <execution>
+            <id>generate-zf25-de</id>
+            <phase>generate-resources</phase>
+            <goals><goal>convert</goal></goals>
+            <configuration>
+              <schematronDirectory>${release.resources.dir}/ZF25_DE/Schema</schematronDirectory>
+              <xsltDirectory>${project.build.directory}/generated-xslt/ZF25_DE/Schema</xsltDirectory>
+              <schematronPattern>**/*.sch</schematronPattern>
+              <languageCode>de</languageCode>
+            </configuration>
+          </execution>
+          <execution>
+            <id>generate-zf25-en</id>
+            <phase>generate-resources</phase>
+            <goals><goal>convert</goal></goals>
+            <configuration>
+              <schematronDirectory>${release.resources.dir}/ZF25_EN/Schema</schematronDirectory>
+              <xsltDirectory>${project.build.directory}/generated-xslt/ZF25_EN/Schema</xsltDirectory>
+              <schematronPattern>**/*.sch</schematronPattern>
+              <languageCode>en</languageCode>
+            </configuration>
+          </execution>
+          <execution>
+            <id>generate-final-de</id>
+            <phase>generate-resources</phase>
+            <goals><goal>convert</goal></goals>
+            <configuration>
+              <schematronDirectory>${release.resources.dir}/_Factur-X 1.09 Zugferd 2.5 - 2026 06 10 - FINAL DE/4. FACTUR-X_1.09_XSD_SCHEMATRON_2026-06-10</schematronDirectory>
+              <xsltDirectory>${project.build.directory}/generated-xslt/_Factur-X 1.09 Zugferd 2.5 - 2026 06 10 - FINAL DE/4. FACTUR-X_1.09_XSD_SCHEMATRON_2026-06-10</xsltDirectory>
+              <schematronPattern>**/*.sch</schematronPattern>
+              <languageCode>de</languageCode>
+            </configuration>
+          </execution>
+          <execution>
+            <id>generate-final-en</id>
+            <phase>generate-resources</phase>
+            <goals><goal>convert</goal></goals>
+            <configuration>
+              <schematronDirectory>${release.resources.dir}/_Factur-X 1.09 Zugferd 2.5 - 2026 06 10 - FINAL EN/4. FACTUR-X_1.09_XSD_SCHEMATRON_2026-06-10</schematronDirectory>
+              <xsltDirectory>${project.build.directory}/generated-xslt/_Factur-X 1.09 Zugferd 2.5 - 2026 06 10 - FINAL EN/4. FACTUR-X_1.09_XSD_SCHEMATRON_2026-06-10</xsltDirectory>
+              <schematronPattern>**/*.sch</schematronPattern>
+              <languageCode>en</languageCode>
+            </configuration>
+          </execution>
+          <execution>
+            <id>generate-final-fr</id>
+            <phase>generate-resources</phase>
+            <goals><goal>convert</goal></goals>
+            <configuration>
+              <schematronDirectory>${release.resources.dir}/_Factur-X 1.09 Zugferd 2.5 - 2026 06 10 - FINAL FR/4. FACTUR-X_1.09_XSD_SCHEMATRON_2026-06-10</schematronDirectory>
+              <xsltDirectory>${project.build.directory}/generated-xslt/_Factur-X 1.09 Zugferd 2.5 - 2026 06 10 - FINAL FR/4. FACTUR-X_1.09_XSD_SCHEMATRON_2026-06-10</xsltDirectory>
+              <schematronPattern>**/*.sch</schematronPattern>
+              <languageCode>fr</languageCode>
+            </configuration>
+          </execution>
+          <!-- The original releases remain untouched. This corrected source is used only to
+               generate the EXTENDED XSLT that the fix branch later installs in place. -->
+          <execution>
+            <id>override-extended-zf25-de</id>
+            <phase>generate-resources</phase>
+            <goals><goal>convert</goal></goals>
+            <configuration>
+              <schematronDirectory>${corrected.extended.source.dir}</schematronDirectory>
+              <xsltDirectory>${project.build.directory}/generated-xslt/ZF25_DE/Schema/4_Factur-X_1.09_EXTENDED</xsltDirectory>
+              <schematronPattern>FACTUR-X_EXTENDED.sch</schematronPattern>
+              <languageCode>de</languageCode>
+            </configuration>
+          </execution>
+          <execution>
+            <id>override-extended-zf25-en</id>
+            <phase>generate-resources</phase>
+            <goals><goal>convert</goal></goals>
+            <configuration>
+              <schematronDirectory>${corrected.extended.source.dir}</schematronDirectory>
+              <xsltDirectory>${project.build.directory}/generated-xslt/ZF25_EN/Schema/4_Factur-X_1.09_EXTENDED</xsltDirectory>
+              <schematronPattern>FACTUR-X_EXTENDED.sch</schematronPattern>
+              <languageCode>en</languageCode>
+            </configuration>
+          </execution>
+          <execution>
+            <id>override-extended-final-de</id>
+            <phase>generate-resources</phase>
+            <goals><goal>convert</goal></goals>
+            <configuration>
+              <schematronDirectory>${corrected.extended.source.dir}</schematronDirectory>
+              <xsltDirectory>${project.build.directory}/generated-xslt/_Factur-X 1.09 Zugferd 2.5 - 2026 06 10 - FINAL DE/4. FACTUR-X_1.09_XSD_SCHEMATRON_2026-06-10/4. Factur-X_1.09_EXTENDED</xsltDirectory>
+              <schematronPattern>FACTUR-X_EXTENDED.sch</schematronPattern>
+              <languageCode>de</languageCode>
+            </configuration>
+          </execution>
+          <execution>
+            <id>override-extended-final-en</id>
+            <phase>generate-resources</phase>
+            <goals><goal>convert</goal></goals>
+            <configuration>
+              <schematronDirectory>${corrected.extended.source.dir}</schematronDirectory>
+              <xsltDirectory>${project.build.directory}/generated-xslt/_Factur-X 1.09 Zugferd 2.5 - 2026 06 10 - FINAL EN/4. FACTUR-X_1.09_XSD_SCHEMATRON_2026-06-10/4. Factur-X_1.09_EXTENDED</xsltDirectory>
+              <schematronPattern>FACTUR-X_EXTENDED.sch</schematronPattern>
+              <languageCode>en</languageCode>
+            </configuration>
+          </execution>
+          <execution>
+            <id>override-extended-final-fr</id>
+            <phase>generate-resources</phase>
+            <goals><goal>convert</goal></goals>
+            <configuration>
+              <schematronDirectory>${corrected.extended.source.dir}</schematronDirectory>
+              <xsltDirectory>${project.build.directory}/generated-xslt/_Factur-X 1.09 Zugferd 2.5 - 2026 06 10 - FINAL FR/4. FACTUR-X_1.09_XSD_SCHEMATRON_2026-06-10/4. Factur-X_1.09_EXTENDED</xsltDirectory>
+              <schematronPattern>FACTUR-X_EXTENDED.sch</schematronPattern>
+              <languageCode>fr</languageCode>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

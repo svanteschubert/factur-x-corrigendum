@@ -1,0 +1,5 @@
+# Keep the regeneration script stable across checkouts.
+*.sh text eol=lf
+*.zip -text
+src/test/resources/releases/** -text
+src/test/resources/corrigendum/** -text

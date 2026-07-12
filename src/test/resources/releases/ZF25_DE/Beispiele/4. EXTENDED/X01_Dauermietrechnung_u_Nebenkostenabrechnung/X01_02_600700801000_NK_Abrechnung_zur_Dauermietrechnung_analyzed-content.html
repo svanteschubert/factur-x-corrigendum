@@ -1,0 +1,1939 @@
+<?xml version="1.0" encoding="utf-8"?><html>
+   <head>
+      <title>Visualisierung der Angaben in elektronischen Rechnungen</title>
+      <meta name="DWC toolkit" content="DWC toolkit"></meta>
+      <style>@page {
+    size: A4 portrait;
+    margin-left: 2cm;
+    margin-right: 2cm;
+    margin-top: 3cm;
+    margin-bottom: 1.5cm;
+    @bottom-right {
+        content: "Seite " counter(page) " von " counter(pages);
+        font-family: "Avenir Next";
+        font-size: 50%;
+    }
+    @top-left {
+        content: "Visualisierung eRechnung © DWC 2025";
+        font-family: "Avenir Next";
+        font-size: 50%;
+    }
+}
+
+.page-break {
+        page-break-after: always;
+    }
+.page-break-inside {
+    page-break-inside: avoid;
+}
+
+
+table {
+    page-break-inside: avoid;
+}
+
+
+/* forces a page break, if needed */
+
+.break {
+    page-break-after: always
+}
+
+body {
+    width: 17cm;
+    font-family: Calibri, "Gill Sans", "Gill Sans MT", "Myriad Pro", Myriad, "DejaVu Sans Condensed", "Liberation Sans", "Nimbus Sans L", Tahoma, Geneva, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    line-height: 1.17;
+    font-size: 60%;
+}
+
+b,
+strong, bold {
+    font-weight: bold;
+}
+
+.small {
+    font-size: 80%;
+}
+
+.smaller {
+    font-size: 40%;
+}
+
+svg:not(:root) {
+    overflow: hidden;
+}
+
+figure {
+    margin: 1em 40px;
+}
+
+.condensed {
+    line-height: 80%;
+}
+
+.boldtext {
+    font-weight: bold;
+}
+.code {
+    /* font-family: monospace, monospace; */
+    font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
+    font-size: 80%;
+}
+
+.table {
+    border-spacing: 2px;
+    padding: 2px;
+    table-layout: fixed;
+    width: 17cm;
+}
+
+.table-space {
+    margin-top: 1cm;
+}
+
+.table-striped > tbody > tr:nth-child(even) {
+    background-color: #f2f2f2
+}
+
+.table-bordered {
+    border-top: 1px solid #ddd;
+}
+
+.border-strong {
+    border-bottom: 2px solid darkgrey;
+}
+
+.border-light {
+    border-bottom: 1px solid #ddd;
+}
+
+.table-bordered > thead > tr > th,
+.table-bordered > tbody > tr > th,
+.table-bordered > tfoot > tr > th,
+.table-bordered > thead > tr > td,
+.table-bordered > tbody > tr > td,
+.table-bordered > tfoot > tr > td {
+    /*   border-top: 1px solid #ddd; */
+    /*   border-bottom: 1px solid #ddd; */
+    border-top: 1px solid white;
+    border-bottom: 1px solid white;
+}
+
+.massive-header > thead > tr > td {
+    background: #9eb5ff;
+}
+
+.light-header > thead > tr > td {
+    background: #cef1ff;
+}
+
+.text-error {
+    color: red;
+}
+
+.text-success {
+    color: darkgreen;
+}
+
+.text-warning {
+    color: darkorange;
+}
+
+.title {
+    font-size: 140%;
+    font-weight: bold;
+    page-break-after: avoid;
+}
+
+.subtitle {
+    font-size: 120%;
+    font-weight: bold;
+    margin-top: 1cm;
+    margin-bottom: 0cm;
+    page-break-after: avoid;
+}
+
+.header-left {
+    font-size: 100%;
+    font-weight: bold;
+    background: #cef1ff;
+}
+
+.cell-left {
+    text-align: left;
+    font-size: 80%;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    padding-right: 2px;
+}
+
+.cell-left-pad {
+    text-align: left;
+    font-size: 80%;
+    word-break: break-all;
+    white-space: pre-wrap;
+    padding: 0.3cm;
+}
+
+.cell-right {
+    text-align: right;
+    font-size: 80%;
+    word-break: normal;
+    white-space: pre-wrap;
+}
+
+.cell-right-pad {
+    text-align: right;
+    font-size: 80%;
+    word-break: break-all;
+    white-space: pre-wrap;
+    padding: 0.3cm;
+}
+
+.cell-light {
+    color: gray;
+    empty-cells: hide;
+}
+
+.text-info {
+    font-style: italic;
+}
+
+.text-bold {
+    font-weight: bold;
+}
+
+.cell-break {
+    word-wrap: break-word;
+    max-width: 1px;
+}
+
+.coloredLabel {
+    background-color: #cef1ff;
+}
+
+.narrow {
+    padding: 0px;
+}</style>
+   </head>
+   <title>eInvoice Daten</title>
+   <h1>Visualisierung eInvoice Daten © DWC 2025</h1>
+   <body>
+      <p></p>
+      <table class="table table-striped table-condensed table-bordered" style="width:100%">
+         <tbody>
+            <tr>
+               <td style="width:70%;"><strong>Element</strong></td>
+               <td style="width:30%;"><strong>Wert</strong></td>
+            </tr>
+            <tr>
+               <td class="code">CrossIndustryInvoice<br></br>  ExchangedDocumentContext<br></br>    GuidelineSpecifiedDocumentContextParameter<br></br>      <strong>ID</strong></td>
+               <td class="small">urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-24</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Specification identifier</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">CrossIndustryInvoice<br></br>    ExchangedDocument<br></br>      <strong>ID</strong></td>
+               <td class="small">600700801000</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-1</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Invoice number</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">CrossIndustryInvoice<br></br>    ExchangedDocument<br></br>      <strong>Name</strong></td>
+               <td class="small">Nebenkostenabrechnung</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-X-2</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Document name</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">CrossIndustryInvoice<br></br>    ExchangedDocument<br></br>      <strong>TypeCode</strong></td>
+               <td class="small">380</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-3</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Invoice type code</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">CrossIndustryInvoice<br></br>  ExchangedDocument<br></br>    IssueDateTime<br></br>      <strong>DateTimeString</strong></td>
+               <td class="small">20261231</td>
+               <tr>
+                  <td class="code" style="text-align: right;">@format</td>
+                  <td class="small">102</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-2</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Invoice issue date</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">CrossIndustryInvoice<br></br>  ExchangedDocument<br></br>    IncludedNote<br></br>      <strong>Content</strong></td>
+               <td class="small">Bank: Musterbank IBAN: DE89 3704 0044 0532 0130 00 BIC / Swift-Code: COBADEFFXXX</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-22</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Invoice note</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">CrossIndustryInvoice<br></br>  ExchangedDocument<br></br>    IncludedNote<br></br>      <strong>SubjectCode</strong></td>
+               <td class="small">REG</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-21</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Invoice note subject code</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">CrossIndustryInvoice<br></br>  ExchangedDocument<br></br>    IncludedNote<br></br>      <strong>Content</strong></td>
+               <td class="small">Wohnungsvermieter GmbH Geschäftsführer: Michael Mustermann </td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-22</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Invoice note</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">CrossIndustryInvoice<br></br>  ExchangedDocument<br></br>    IncludedNote<br></br>      <strong>SubjectCode</strong></td>
+               <td class="small">REG</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-21</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Invoice note subject code</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">CrossIndustryInvoice<br></br>  ExchangedDocument<br></br>    IncludedNote<br></br>      <strong>Content</strong></td>
+               <td class="small">Nebenkostenabrechnung 2026</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-22</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Invoice note</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">CrossIndustryInvoice<br></br>  ExchangedDocument<br></br>    IncludedNote<br></br>      <strong>SubjectCode</strong></td>
+               <td class="small">AAI</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-21</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Invoice note subject code</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">CrossIndustryInvoice<br></br>  ExchangedDocument<br></br>    IncludedNote<br></br>      <strong>Content</strong></td>
+               <td class="small">Sehr geehrter Mieter, wir erlauben uns Ihnen die Nebenkostenabrechnung, gemäß den
+                  gültigen Vereinbarungen, zu übersenden.</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-22</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Invoice note</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">CrossIndustryInvoice<br></br>  ExchangedDocument<br></br>    IncludedNote<br></br>      <strong>SubjectCode</strong></td>
+               <td class="small">AAI</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-21</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Invoice note subject code</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">CrossIndustryInvoice<br></br>  ExchangedDocument<br></br>    IncludedNote<br></br>      <strong>Content</strong></td>
+               <td class="small">Dieser Rechnung sind die Nebenkostendetails als rechnungsbegründende Unterlage beigefügt!
+                  </td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-22</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Invoice note</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">CrossIndustryInvoice<br></br>  ExchangedDocument<br></br>    IncludedNote<br></br>      <strong>SubjectCode</strong></td>
+               <td class="small">AAI</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-21</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Invoice note subject code</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">CrossIndustryInvoice<br></br>  ExchangedDocument<br></br>    IncludedNote<br></br>      <strong>Content</strong></td>
+               <td class="small">Wenn nicht anders angegeben entspricht das Leistungsdatum dem Rechnungsdatum.</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-22</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Invoice note</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">CrossIndustryInvoice<br></br>  ExchangedDocument<br></br>    IncludedNote<br></br>      <strong>SubjectCode</strong></td>
+               <td class="small">AAI</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-21</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Invoice note subject code</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">CrossIndustryInvoice<br></br>  ExchangedDocument<br></br>    IncludedNote<br></br>      <strong>Content</strong></td>
+               <td class="small">ZUGFeRD vers 2.5.0 Extended</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-22</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Invoice note</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">CrossIndustryInvoice<br></br>  ExchangedDocument<br></br>    IncludedNote<br></br>      <strong>SubjectCode</strong></td>
+               <td class="small">ACB</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-21</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Invoice note subject code</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  IncludedSupplyChainTradeLineItem<br></br>    AssociatedDocumentLineDocument<br></br>      <strong>LineID</strong></td>
+               <td class="small">000001</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-126</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Invoice line identifier</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  IncludedSupplyChainTradeLineItem<br></br>    SpecifiedTradeProduct<br></br>      <strong>Name</strong></td>
+               <td class="small">Nebenkosten Abrechnung 2026</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-153</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Item name</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  IncludedSupplyChainTradeLineItem<br></br>    SpecifiedTradeProduct<br></br>      <strong>Description</strong></td>
+               <td class="small">Nebenkosten Büro Nr. 123 - 100 m²</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-154</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Item description</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SpecifiedLineTradeAgreement<br></br>  BuyerOrderReferencedDocument<br></br>    FormattedIssueDateTime<br></br>      <strong>DateTimeString</strong></td>
+               <td class="small">20260301</td>
+               <tr>
+                  <td class="code" style="text-align: right;">@format</td>
+                  <td class="small">102</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-X-22</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Document date, value</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeAgreement<br></br>    NetPriceProductTradePrice<br></br>      <strong>ChargeAmount</strong></td>
+               <td class="small">900.00</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-146</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Item net price</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeAgreement<br></br>    NetPriceProductTradePrice<br></br>      <strong>BasisQuantity</strong></td>
+               <td class="small">1.0000</td>
+               <tr>
+                  <td class="code" style="text-align: right;">@unitCode</td>
+                  <td class="small">H87</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-149</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Item price base quantity</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  IncludedSupplyChainTradeLineItem<br></br>    SpecifiedLineTradeDelivery<br></br>      <strong>BilledQuantity</strong></td>
+               <td class="small">1.00</td>
+               <tr>
+                  <td class="code" style="text-align: right;">@unitCode</td>
+                  <td class="small">H87</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-129</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Invoiced quantity</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeSettlement<br></br>    ApplicableTradeTax<br></br>      <strong>TypeCode</strong></td>
+               <td class="small">VAT</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-151-0</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Tax Type(Code)Invoiced item VAT category code, Content</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeSettlement<br></br>    ApplicableTradeTax<br></br>      <strong>CategoryCode</strong></td>
+               <td class="small">S</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-151</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Invoiced item VAT category code</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeSettlement<br></br>    ApplicableTradeTax<br></br>      <strong>RateApplicablePercent</strong></td>
+               <td class="small">19.00</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-152</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Invoiced item VAT rate</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SpecifiedLineTradeSettlement<br></br>  BillingSpecifiedPeriod<br></br>    StartDateTime<br></br>      <strong>DateTimeString</strong></td>
+               <td class="small">20260401</td>
+               <tr>
+                  <td class="code" style="text-align: right;">@format</td>
+                  <td class="small">102</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-134</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Invoice line period start date</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SpecifiedLineTradeSettlement<br></br>  BillingSpecifiedPeriod<br></br>    EndDateTime<br></br>      <strong>DateTimeString</strong></td>
+               <td class="small">20261231</td>
+               <tr>
+                  <td class="code" style="text-align: right;">@format</td>
+                  <td class="small">102</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-135</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Invoice line period end date</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeSettlement<br></br>    SpecifiedTradeSettlementLineMonetarySummation<br></br>      <strong>LineTotalAmount</strong></td>
+               <td class="small">900.00</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-131</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Invoice line net amount</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeSettlement<br></br>    SpecifiedTradeSettlementLineMonetarySummation<br></br>      <strong>TotalAllowanceChargeAmount</strong></td>
+               <td class="small">0.00</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-X-98</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Total Allowance AND Charge Amount for this line</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  IncludedSupplyChainTradeLineItem<br></br>    AssociatedDocumentLineDocument<br></br>      <strong>LineID</strong></td>
+               <td class="small">000002</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-126</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Invoice line identifier</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  IncludedSupplyChainTradeLineItem<br></br>    SpecifiedTradeProduct<br></br>      <strong>Name</strong></td>
+               <td class="small">Nebenkostenvorauszahlung</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-153</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Item name</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  IncludedSupplyChainTradeLineItem<br></br>    SpecifiedTradeProduct<br></br>      <strong>Description</strong></td>
+               <td class="small">geleistete Nebenkostenvorauszahlung Büro Nr. 123 - 100 m²</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-154</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Item description</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SpecifiedLineTradeAgreement<br></br>  BuyerOrderReferencedDocument<br></br>    FormattedIssueDateTime<br></br>      <strong>DateTimeString</strong></td>
+               <td class="small">20260301</td>
+               <tr>
+                  <td class="code" style="text-align: right;">@format</td>
+                  <td class="small">102</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-X-22</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Document date, value</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeAgreement<br></br>    NetPriceProductTradePrice<br></br>      <strong>ChargeAmount</strong></td>
+               <td class="small">85.00</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-146</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Item net price</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeAgreement<br></br>    NetPriceProductTradePrice<br></br>      <strong>BasisQuantity</strong></td>
+               <td class="small">1.0000</td>
+               <tr>
+                  <td class="code" style="text-align: right;">@unitCode</td>
+                  <td class="small">MON</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-149</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Item price base quantity</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  IncludedSupplyChainTradeLineItem<br></br>    SpecifiedLineTradeDelivery<br></br>      <strong>BilledQuantity</strong></td>
+               <td class="small">-8.00</td>
+               <tr>
+                  <td class="code" style="text-align: right;">@unitCode</td>
+                  <td class="small">MON</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-129</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Invoiced quantity</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeSettlement<br></br>    ApplicableTradeTax<br></br>      <strong>TypeCode</strong></td>
+               <td class="small">VAT</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-151-0</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Tax Type(Code)Invoiced item VAT category code, Content</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeSettlement<br></br>    ApplicableTradeTax<br></br>      <strong>CategoryCode</strong></td>
+               <td class="small">S</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-151</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Invoiced item VAT category code</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeSettlement<br></br>    ApplicableTradeTax<br></br>      <strong>RateApplicablePercent</strong></td>
+               <td class="small">19.00</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-152</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Invoiced item VAT rate</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SpecifiedLineTradeSettlement<br></br>  BillingSpecifiedPeriod<br></br>    StartDateTime<br></br>      <strong>DateTimeString</strong></td>
+               <td class="small">20260401</td>
+               <tr>
+                  <td class="code" style="text-align: right;">@format</td>
+                  <td class="small">102</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-134</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Invoice line period start date</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SpecifiedLineTradeSettlement<br></br>  BillingSpecifiedPeriod<br></br>    EndDateTime<br></br>      <strong>DateTimeString</strong></td>
+               <td class="small">20261231</td>
+               <tr>
+                  <td class="code" style="text-align: right;">@format</td>
+                  <td class="small">102</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-135</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Invoice line period end date</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeSettlement<br></br>    SpecifiedTradeSettlementLineMonetarySummation<br></br>      <strong>LineTotalAmount</strong></td>
+               <td class="small">-680.00</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-131</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Invoice line net amount</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeSettlement<br></br>    SpecifiedTradeSettlementLineMonetarySummation<br></br>      <strong>TotalAllowanceChargeAmount</strong></td>
+               <td class="small">0.00</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-X-98</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Total Allowance AND Charge Amount for this line</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  IncludedSupplyChainTradeLineItem<br></br>    AssociatedDocumentLineDocument<br></br>      <strong>LineID</strong></td>
+               <td class="small">000003</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-126</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Invoice line identifier</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  IncludedSupplyChainTradeLineItem<br></br>    SpecifiedTradeProduct<br></br>      <strong>Name</strong></td>
+               <td class="small">HeizkostenAbrechnung 2026</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-153</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Item name</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  IncludedSupplyChainTradeLineItem<br></br>    SpecifiedTradeProduct<br></br>      <strong>Description</strong></td>
+               <td class="small">Heizkosten Büro Nr. 123 - 100 m²</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-154</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Item description</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SpecifiedLineTradeAgreement<br></br>  BuyerOrderReferencedDocument<br></br>    FormattedIssueDateTime<br></br>      <strong>DateTimeString</strong></td>
+               <td class="small">20260301</td>
+               <tr>
+                  <td class="code" style="text-align: right;">@format</td>
+                  <td class="small">102</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-X-22</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Document date, value</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeAgreement<br></br>    NetPriceProductTradePrice<br></br>      <strong>ChargeAmount</strong></td>
+               <td class="small">950.00</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-146</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Item net price</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeAgreement<br></br>    NetPriceProductTradePrice<br></br>      <strong>BasisQuantity</strong></td>
+               <td class="small">1.0000</td>
+               <tr>
+                  <td class="code" style="text-align: right;">@unitCode</td>
+                  <td class="small">H87</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-149</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Item price base quantity</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  IncludedSupplyChainTradeLineItem<br></br>    SpecifiedLineTradeDelivery<br></br>      <strong>BilledQuantity</strong></td>
+               <td class="small">1.00</td>
+               <tr>
+                  <td class="code" style="text-align: right;">@unitCode</td>
+                  <td class="small">H87</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-129</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Invoiced quantity</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeSettlement<br></br>    ApplicableTradeTax<br></br>      <strong>TypeCode</strong></td>
+               <td class="small">VAT</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-151-0</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Tax Type(Code)Invoiced item VAT category code, Content</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeSettlement<br></br>    ApplicableTradeTax<br></br>      <strong>CategoryCode</strong></td>
+               <td class="small">S</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-151</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Invoiced item VAT category code</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeSettlement<br></br>    ApplicableTradeTax<br></br>      <strong>RateApplicablePercent</strong></td>
+               <td class="small">19.00</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-152</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Invoiced item VAT rate</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SpecifiedLineTradeSettlement<br></br>  BillingSpecifiedPeriod<br></br>    StartDateTime<br></br>      <strong>DateTimeString</strong></td>
+               <td class="small">20260401</td>
+               <tr>
+                  <td class="code" style="text-align: right;">@format</td>
+                  <td class="small">102</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-134</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Invoice line period start date</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SpecifiedLineTradeSettlement<br></br>  BillingSpecifiedPeriod<br></br>    EndDateTime<br></br>      <strong>DateTimeString</strong></td>
+               <td class="small">20261231</td>
+               <tr>
+                  <td class="code" style="text-align: right;">@format</td>
+                  <td class="small">102</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-135</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Invoice line period end date</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeSettlement<br></br>    SpecifiedTradeSettlementLineMonetarySummation<br></br>      <strong>LineTotalAmount</strong></td>
+               <td class="small">950.00</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-131</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Invoice line net amount</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeSettlement<br></br>    SpecifiedTradeSettlementLineMonetarySummation<br></br>      <strong>TotalAllowanceChargeAmount</strong></td>
+               <td class="small">0.00</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-X-98</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Total Allowance AND Charge Amount for this line</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  IncludedSupplyChainTradeLineItem<br></br>    AssociatedDocumentLineDocument<br></br>      <strong>LineID</strong></td>
+               <td class="small">000004</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-126</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Invoice line identifier</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  IncludedSupplyChainTradeLineItem<br></br>    SpecifiedTradeProduct<br></br>      <strong>Name</strong></td>
+               <td class="small">Heizkostenvorauszahlung</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-153</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Item name</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  IncludedSupplyChainTradeLineItem<br></br>    SpecifiedTradeProduct<br></br>      <strong>Description</strong></td>
+               <td class="small">geleistetete Heizkostenvoorauszahlung  Büro Nr. 123 - 100 m²</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-154</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Item description</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SpecifiedLineTradeAgreement<br></br>  BuyerOrderReferencedDocument<br></br>    FormattedIssueDateTime<br></br>      <strong>DateTimeString</strong></td>
+               <td class="small">20260301</td>
+               <tr>
+                  <td class="code" style="text-align: right;">@format</td>
+                  <td class="small">102</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-X-22</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Document date, value</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeAgreement<br></br>    NetPriceProductTradePrice<br></br>      <strong>ChargeAmount</strong></td>
+               <td class="small">125.00</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-146</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Item net price</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeAgreement<br></br>    NetPriceProductTradePrice<br></br>      <strong>BasisQuantity</strong></td>
+               <td class="small">1.0000</td>
+               <tr>
+                  <td class="code" style="text-align: right;">@unitCode</td>
+                  <td class="small">MON</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-149</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Item price base quantity</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  IncludedSupplyChainTradeLineItem<br></br>    SpecifiedLineTradeDelivery<br></br>      <strong>BilledQuantity</strong></td>
+               <td class="small">-8.00</td>
+               <tr>
+                  <td class="code" style="text-align: right;">@unitCode</td>
+                  <td class="small">MON</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-129</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Invoiced quantity</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeSettlement<br></br>    ApplicableTradeTax<br></br>      <strong>TypeCode</strong></td>
+               <td class="small">VAT</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-151-0</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Tax Type(Code)Invoiced item VAT category code, Content</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeSettlement<br></br>    ApplicableTradeTax<br></br>      <strong>CategoryCode</strong></td>
+               <td class="small">S</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-151</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Invoiced item VAT category code</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeSettlement<br></br>    ApplicableTradeTax<br></br>      <strong>RateApplicablePercent</strong></td>
+               <td class="small">19.00</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-152</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Invoiced item VAT rate</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SpecifiedLineTradeSettlement<br></br>  BillingSpecifiedPeriod<br></br>    StartDateTime<br></br>      <strong>DateTimeString</strong></td>
+               <td class="small">20260401</td>
+               <tr>
+                  <td class="code" style="text-align: right;">@format</td>
+                  <td class="small">102</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-134</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Invoice line period start date</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SpecifiedLineTradeSettlement<br></br>  BillingSpecifiedPeriod<br></br>    EndDateTime<br></br>      <strong>DateTimeString</strong></td>
+               <td class="small">20261231</td>
+               <tr>
+                  <td class="code" style="text-align: right;">@format</td>
+                  <td class="small">102</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-135</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Invoice line period end date</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeSettlement<br></br>    SpecifiedTradeSettlementLineMonetarySummation<br></br>      <strong>LineTotalAmount</strong></td>
+               <td class="small">-1000.00</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-131</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Invoice line net amount</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">IncludedSupplyChainTradeLineItem<br></br>  SpecifiedLineTradeSettlement<br></br>    SpecifiedTradeSettlementLineMonetarySummation<br></br>      <strong>TotalAllowanceChargeAmount</strong></td>
+               <td class="small">0.00</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-X-98</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Total Allowance AND Charge Amount for this line</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">CrossIndustryInvoice<br></br>  SupplyChainTradeTransaction<br></br>    ApplicableHeaderTradeAgreement<br></br>      <strong>BuyerReference</strong></td>
+               <td class="small">Käuferreferenz</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-10</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Buyer reference</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  ApplicableHeaderTradeAgreement<br></br>    SellerTradeParty<br></br>      <strong>GlobalID</strong></td>
+               <td class="small">4000000000000</td>
+               <tr>
+                  <td class="code" style="text-align: right;">@schemeID</td>
+                  <td class="small">0088</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-29-0</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Seller identifier (Global ID)</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  ApplicableHeaderTradeAgreement<br></br>    SellerTradeParty<br></br>      <strong>Name</strong></td>
+               <td class="small">Wohnungsvermieter GmbH</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-27</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Seller name</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeAgreement<br></br>  SellerTradeParty<br></br>    DefinedTradeContact<br></br>      <strong>PersonName</strong></td>
+               <td class="small">Otto Vermieter</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-41</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Seller contact point</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SellerTradeParty<br></br>  DefinedTradeContact<br></br>    TelephoneUniversalCommunication<br></br>      <strong>CompleteNumber</strong></td>
+               <td class="small">0160 123456789</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-42</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Seller contact telephone number</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SellerTradeParty<br></br>  DefinedTradeContact<br></br>    EmailURIUniversalCommunication<br></br>      <strong>URIID</strong></td>
+               <td class="small">o.vermieter@wohnung.de</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-43</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Seller contact email address</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeAgreement<br></br>  SellerTradeParty<br></br>    PostalTradeAddress<br></br>      <strong>PostcodeCode</strong></td>
+               <td class="small">12345</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-38</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Seller post code</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeAgreement<br></br>  SellerTradeParty<br></br>    PostalTradeAddress<br></br>      <strong>LineOne</strong></td>
+               <td class="small">Vermieterstrasse 11</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-35</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Seller address line 1</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeAgreement<br></br>  SellerTradeParty<br></br>    PostalTradeAddress<br></br>      <strong>CityName</strong></td>
+               <td class="small">Musterstadt</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-37</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Seller city</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeAgreement<br></br>  SellerTradeParty<br></br>    PostalTradeAddress<br></br>      <strong>CountryID</strong></td>
+               <td class="small">DE</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-40</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Seller country code</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeAgreement<br></br>  SellerTradeParty<br></br>    URIUniversalCommunication<br></br>      <strong>URIID</strong></td>
+               <td class="small">info@vermieter.com</td>
+               <tr>
+                  <td class="code" style="text-align: right;">@schemeID</td>
+                  <td class="small">0088</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-34</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Seller electronic address</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeAgreement<br></br>  SellerTradeParty<br></br>    SpecifiedTaxRegistration<br></br>      <strong>ID</strong></td>
+               <td class="small">70000/09999</td>
+               <tr>
+                  <td class="code" style="text-align: right;">@schemeID</td>
+                  <td class="small">FC</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-31</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Seller VAT identifier</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeAgreement<br></br>  SellerTradeParty<br></br>    SpecifiedTaxRegistration<br></br>      <strong>ID</strong></td>
+               <td class="small">DE106008386</td>
+               <tr>
+                  <td class="code" style="text-align: right;">@schemeID</td>
+                  <td class="small">VA</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-31</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Seller VAT identifier</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  ApplicableHeaderTradeAgreement<br></br>    BuyerTradeParty<br></br>      <strong>ID</strong></td>
+               <td class="small">0000999999</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-46</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Buyer identifier</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  ApplicableHeaderTradeAgreement<br></br>    BuyerTradeParty<br></br>      <strong>Name</strong></td>
+               <td class="small">Max u Monica Mieter GbR</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-44</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Buyer name</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeAgreement<br></br>  BuyerTradeParty<br></br>    DefinedTradeContact<br></br>      <strong>PersonName</strong></td>
+               <td class="small">Max u Monica Mieter</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-56</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Buyer contact point</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeAgreement<br></br>  BuyerTradeParty<br></br>    PostalTradeAddress<br></br>      <strong>PostcodeCode</strong></td>
+               <td class="small">12346</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-53</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Buyer post code</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeAgreement<br></br>  BuyerTradeParty<br></br>    PostalTradeAddress<br></br>      <strong>LineOne</strong></td>
+               <td class="small">Mieterstrasse 5</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-50</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Buyer address line 1</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeAgreement<br></br>  BuyerTradeParty<br></br>    PostalTradeAddress<br></br>      <strong>LineTwo</strong></td>
+               <td class="small">2. OG</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-51</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Buyer address line 2</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeAgreement<br></br>  BuyerTradeParty<br></br>    PostalTradeAddress<br></br>      <strong>CityName</strong></td>
+               <td class="small">Musterstadt</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-52</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Buyer city</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeAgreement<br></br>  BuyerTradeParty<br></br>    PostalTradeAddress<br></br>      <strong>CountryID</strong></td>
+               <td class="small">DE</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-55</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Buyer country code</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  ApplicableHeaderTradeAgreement<br></br>    SellerOrderReferencedDocument<br></br>      <strong>IssuerAssignedID</strong></td>
+               <td class="small">2159999999</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-14</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Sales order reference</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeAgreement<br></br>  SellerOrderReferencedDocument<br></br>    FormattedIssueDateTime<br></br>      <strong>DateTimeString</strong></td>
+               <td class="small">20260301</td>
+               <tr>
+                  <td class="code" style="text-align: right;">@format</td>
+                  <td class="small">102</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-X-146</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Sales Order confirmation date, value</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  ApplicableHeaderTradeAgreement<br></br>    ContractReferencedDocument<br></br>      <strong>IssuerAssignedID</strong></td>
+               <td class="small">Vertragsnr. 0815-123456789</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-12</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Contract reference</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  ApplicableHeaderTradeAgreement<br></br>    AdditionalReferencedDocument<br></br>      <strong>IssuerAssignedID</strong></td>
+               <td class="small">0815-123456789</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-122</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Supporting document reference</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  ApplicableHeaderTradeAgreement<br></br>    AdditionalReferencedDocument<br></br>      <strong>TypeCode</strong></td>
+               <td class="small">916</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-122-0</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small"></td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  ApplicableHeaderTradeAgreement<br></br>    AdditionalReferencedDocument<br></br>      <strong>Name</strong></td>
+               <td class="small">Nebenkostendetails</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-123</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Supporting document description</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  ApplicableHeaderTradeAgreement<br></br>    AdditionalReferencedDocument<br></br>      <strong>AttachmentBinaryObject</strong></td>
+               <td class="small">JVBERi0xLjcNCiW1tbW1DQoxIDAgb2JqDQo8PC9UeXBlL0NhdGFsb2cvUGFnZXMgMiAwIFIvTGFuZyhkZSkgL1N0cnVjdFRyZWVSb290IDE1IDAgUi9NYXJrSW5mbzw8L01hcmtlZCB0cnVlPj4vTWV0YWRhdGEgMzAgMCBSL1ZpZXdlclByZWZlcmVuY2VzIDMxIDAgUj4+DQplbmRvYmoNCjIgMCBvYmoNCjw8L1R5cGUvUGFnZXMvQ291bnQgMS9LaWRzWyAzIDAgUl0gPj4NCmVuZG9iag0KMyAwIG9iag0KPDwvVHlwZS9QYWdlL1BhcmVudCAyIDAgUi9SZXNvdXJjZXM8PC9Gb250PDwvRjEgNSAwIFIvRjIgOSAwIFI+Pi9FeHRHU3RhdGU8PC9HUzcgNyAwIFIvR1M4IDggMCBSPj4vUHJvY1NldFsvUERGL1RleHQvSW1hZ2VCL0ltYWdlQy9JbWFnZUldID4+L01lZGlhQm94WyAwIDAgNTk1LjMyIDg0MS45Ml0gL0NvbnRlbnRzIDQgMCBSL0dyb3VwPDwvVHlwZS9Hcm91cC9TL1RyYW5zcGFyZW5jeS9DUy9EZXZpY2VSR0I+Pi9UYWJzL1MvU3RydWN0UGFyZW50cyAwPj4NCmVuZG9iag0KNCAwIG9iag0KPDwvRmlsdGVyL0ZsYXRlRGVjb2RlL0xlbmd0aCAzNTM+Pg0Kc3RyZWFtDQp4nLWUS2vDMAzH7wZ/Bx3bQRxJfgZCDk3TsrEdRgM7jB3K1vW0ssf3hzkPxsqSsUcaEEaykX7W3wqkm+ftAfI8vSrPl4Dp5fawh9nDLllW86KAxbKEFylQYfOF4AkQbGaVZgiGVMbwupPi5gwOUixqKdIVATHUj1I0RxEIPCtkA946ZQLUT/HQeuNh/xbzwr71Qu+tpbidwfwO6gspqpjuWgqorkqAY06agJOBvcrcICppxa5FbQk7sByRLaIJ0UpE66LpIjF557fxVTQf4xzXqkhs3LMxbrFIOO/OWIrmi6M7/rrFX9HZemX9CPpPesqTaD/aU+eMMvwXMH1asR1Z5Qe01tRrao+1M1Wnb6u/LxL9sfcvTYcImYxiO0pIeIKKmeJstCL7T72I79yY5u33M7BqejI9UUbfEaE+QcWgtB+sCDE3BYL6vu1//BuQ7tds8onWDpWm4ZsPzs0771IhvA0KZW5kc3RyZWFtDQplbmRvYmoNCjUgMCBvYmoNCjw8L1R5cGUvRm9udC9TdWJ0eXBlL1RydWVUeXBlL05hbWUvRjEvQmFzZUZvbnQvQkNERUVFK1d1ZXJ0aC1Cb29rL0VuY29kaW5nL1dpbkFuc2lFbmNvZGluZy9Gb250RGVzY3JpcHRvciA2IDAgUi9GaXJzdENoYXIgMzIvTGFzdENoYXIgMzIvV2lkdGhzIDI5IDAgUj4+DQplbmRvYmoNCjYgMCBvYmoNCjw8L1R5cGUvRm9udERlc2NyaXB0b3IvRm9udE5hbWUvQkNERUVFK1d1ZXJ0aC1Cb29rL0ZsYWdzIDMyL0l0YWxpY0FuZ2xlIDAvQXNjZW50IDk2Ni9EZXNjZW50IC0yMzQvQ2FwSGVpZ2h0IDc2Ni9BdmdXaWR0aCAzNzkvTWF4V2lkdGggMTMzNS9Gb250V2VpZ2h0IDMwMC9YSGVpZ2h0IDI1MC9MZWFkaW5nIDIyMC9TdGVtViAzNy9Gb250QkJveFsgLTE0OCAtMjM0IDExODcgNzY2XSAvRm9udEZpbGUyIDI3IDAgUj4+DQplbmRvYmoNCjcgMCBvYmoNCjw8L1R5cGUvRXh0R1N0YXRlL0JNL05vcm1hbC9jYSAxPj4NCmVuZG9iag0KOCAwIG9iag0KPDwvVHlwZS9FeHRHU3RhdGUvQk0vTm9ybWFsL0NBIDE+Pg0KZW5kb2JqDQo5IDAgb2JqDQo8PC9UeXBlL0ZvbnQvU3VidHlwZS9UeXBlMC9CYXNlRm9udC9CQ0RGRUUrV3VlcnRoLUJvb2svRW5jb2RpbmcvSWRlbnRpdHktSC9EZXNjZW5kYW50Rm9udHMgMTAgMCBSL1RvVW5pY29kZSAyNiAwIFI+Pg0KZW5kb2JqDQoxMCAwIG9iag0KWyAxMSAwIFJdIA0KZW5kb2JqDQoxMSAwIG9iag0KPDwvQmFzZUZvbnQvQkNERkVFK1d1ZXJ0aC1Cb29rL1N1YnR5cGUvQ0lERm9udFR5cGUyL1R5cGUvRm9udC9DSURUb0dJRE1hcC9JZGVudGl0eS9EVyAxMDAwL0NJRFN5c3RlbUluZm8gMTIgMCBSL0ZvbnREZXNjcmlwdG9yIDEzIDAgUi9XIDI4IDAgUj4+DQplbmRvYmoNCjEyIDAgb2JqDQo8PC9P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Widso5la6c0+VZw9oZmX3DU2a2rskile1qlUvmqnumouzAcX9Yf+lwcm8/n/FH2x6M+w4mDNQXeGt8N9X6boz2jPT5srZ3o9rT/ly853N09/mg/9GfyUxhn/N/P/8fk0C2jOH4bm/iG1Xffw9rU7NJWeG3xH4+J1aI7cYFuwUl3y5+JtpsyUmTJTZspM+d+U/w9EaYoEDQplbmRzdHJlYW0NCmVuZG9iag0KMjggMCBvYmoNClsgMFsgMjUwXSAgM1sgMjUwXSAgMTZbIDE4MV0gIDE5WyA1NTNdICAyMVsgNTUzXSAgMjVbIDU1M10gIDM3WyA1MTZdICAzOVsgNjE5XSAgNDlbIDc1NF0gIDY4WyA1MTMgNTEzXSAgNzFbIDUxMyA0NjhdICA3NlsgMTk5XSAgNzhbIDQxMiAxOTkgNjcyIDQ2MCA1MDggNTEzXSAgODZbIDM1MSAyMTggNDU4XSBdIA0KZW5kb2JqDQoyOSAwIG9iag0KWyAyNTBdIA0KZW5kb2JqDQozMCAwIG9iag0KPDwvVHlwZS9NZXRhZGF0YS9TdWJ0eXBlL1hNTC9MZW5ndGggMzE4NT4+DQpzdHJlYW0NCjw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+PHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iMy4xLTcwMSI+CjxyZGY6UkRGIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyI+CjxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PSIiICB4bWxuczpwZGY9Imh0dHA6Ly9ucy5hZG9iZS5jb20vcGRmLzEuMy8iPgo8cGRmOlByb2R1Y2VyPk1pY3Jvc29mdMKuIFdvcmQgZsO8ciBNaWNyb3NvZnQgMzY1PC9wZGY6UHJvZHVjZXI+PC9yZGY6RGVzY3JpcHRpb24+CjxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PSIiIHhtbG5zOnBkZng9Imh0dHA6Ly9ucy5hZG9iZS5jb20vcGRmeC8xLjMvIj4KPC9yZGY6RGVzY3JpcHRpb24+CjxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PSIiICB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iPgo8ZGM6Y3JlYXRvcj48cmRmOlNlcT48cmRmOmxpPkhvZmZtYW5uLCBNaWtlPC9yZGY6bGk+PC9yZGY6U2VxPjwvZGM6Y3JlYXRvcj48L3JkZjpEZXNjcmlwdGlvbj4KPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgIHhtbG5zOnhtcD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyI+Cjx4bXA6Q3JlYXRvclRvb2w+TWljcm9zb2Z0wq4gV29yZCBmw7xyIE1pY3Jvc29mdCAzNjU8L3htcDpDcmVhdG9yVG9vbD48eG1wOkNyZWF0ZURhdGU+MjAyNi0wMy0wOVQwODozMDoyNCswMTowMDwveG1wOkNyZWF0ZURhdGU+PHhtcDpNb2RpZnlEYXRlPjIwMjYtMDMtMDlUMDg6MzA6MjQrMDE6MDA8L3htcDpNb2RpZnlEYXRlPjwvcmRmOkRlc2NyaXB0aW9uPgo8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiAgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iPgo8eG1wTU06RG9jdW1lbnRJRD51dWlkOjVFODNCRDVGLUYxQkEtNEJGQS04NkYzLTkxQTZFRkEwMzU5NzwveG1wTU06RG9jdW1lbnRJRD48eG1wTU06SW5zdGFuY2VJRD51dWlkOjVFODNCRDVGLUYxQkEtNEJGQS04NkYzLTkxQTZFRkEwMzU5NzwveG1wTU06SW5zdGFuY2VJRD48L3JkZjpEZXNjcmlwdGlvbj4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCjwvcmRmOlJERj48L3g6eG1wbWV0YT48P3hwYWNrZXQgZW5kPSJ3Ij8+DQplbmRzdHJlYW0NCmVuZG9iag0KMzEgMCBvYmoNCjw8L0Rpc3BsYXlEb2NUaXRsZSB0cnVlPj4NCmVuZG9iag0KMzIgMCBvYmoNCjw8L1R5cGUvWFJlZi9TaXplIDMyL1dbIDEgNCAyXSAvUm9vdCAxIDAgUi9JbmZvIDE0IDAgUi9JRFs8NUZCRDgzNUVCQUYxRkE0Qjg2RjM5MUE2RUZBMDM1OTc+PDVGQkQ4MzVFQkFGMUZBNEI4NkYzOTFBNkVGQTAzNTk3Pl0gL0ZpbHRlci9GbGF0ZURlY29kZS9MZW5ndGggMTE5Pj4NCnN0cmVhbQ0KeJxjYACC//8ZgaQgAwOIWgyhboMpxk9ginkumGLxAFOs7hCqBkJtBFNsFhAqDEL9AlPsLmCKA0gxAc0UY2CFUGwQih1CcUAoFggFVckJ1McZA+MxQigmCMUMlONWAxvNsxpMqYeDKQ0ZCGUOpkx+MzAAACO9DfANCmVuZHN0cmVhbQ0KZW5kb2JqDQp4cmVmDQowIDMzDQowMDAwMDAwMDE1IDY1NTM1IGYNCjAwMDAwMDAwMTcgMDAwMDAgbg0KMDAwMDAwMDE2MyAwMDAwMCBuDQowMDAwMDAwMjE5IDAwMDAwIG4NCjAwMDAwMDA0OTggMDAwMDAgbg0KMDAwMDAwMDkyNSAwMDAwMCBuDQowMDAwMDAxMDk2IDAwMDAwIG4NCjAwMDAwMDEzNTEgMDAwMDAgbg0KMDAwMDAwMTQwNCAwMDAwMCBuDQowMDAwMDAxNDU3IDAwMDAwIG4NCjAwMDAwMDE1OTIgMDAwMDAgbg0KMDAwMDAwMTYyMiAwMDAwMCBuDQowMDAwMDAxNzg2IDAwMDAwIG4NCjAwMDAwMDE4NjAgMDAwMDAgbg0KMDAwMDAwMjExNiAwMDAwMCBuDQowMDAwMDAwMDE2IDY1NTM1IGYNCjAwMDAwMDAwMTcgNjU1MzUgZg0KMDAwMDAwMDAxOCA2NTUzNSBmDQowMDAwMDAwMDE5IDY1NTM1IGYNCjAwMDAwMDAwMjAgNjU1MzUgZg0KMDAwMDAwMDAyMSA2NTUzNSBmDQowMDAwMDAwMDIyIDY1NTM1IGYNCjAwMDAwMDAwMjMgNjU1MzUgZg0KMDAwMDAwMDAyNCA2NTUzNSBmDQowMDAwMDAwMDI1IDY1NTM1IGYNCjAwMDAwMDAwMDAgNjU1MzUgZg0KMDAwMDAwMjg1NCAwMDAwMCBuDQowMDAwMDAzMjQzIDAwMDAwIG4NCjAwMDAwMTAwNzEgMDAwMDAgbg0KMDAwMDAxMDI2OCAwMDAwMCBuDQowMDAwMDEwMjk1IDAwMDAwIG4NCjAwMDAwMTM1NjMgMDAwMDAgbg0KMDAwMDAxMzYwOCAwMDAwMCBuDQp0cmFpbGVyDQo8PC9TaXplIDMzL1Jvb3QgMSAwIFIvSW5mbyAxNCAwIFIvSURbPDVGQkQ4MzVFQkFGMUZBNEI4NkYzOTFBNkVGQTAzNTk3Pjw1RkJEODM1RUJBRjFGQTRCODZGMzkxQTZFRkEwMzU5Nz5dID4+DQpzdGFydHhyZWYNCjEzOTI4DQolJUVPRg0KeHJlZg0KMCAwDQp0cmFpbGVyDQo8PC9TaXplIDMzL1Jvb3QgMSAwIFIvSW5mbyAxNCAwIFIvSURbPDVGQkQ4MzVFQkFGMUZBNEI4NkYzOTFBNkVGQTAzNTk3Pjw1RkJEODM1RUJBRjFGQTRCODZGMzkxQTZFRkEwMzU5Nz5dIC9QcmV2IDEzOTI4L1hSZWZTdG0gMTM2MDg+Pg0Kc3RhcnR4cmVmDQoxNDc0NQ0KJSVFT0Y=</td>
+               <tr>
+                  <td class="code" style="text-align: right;">@mimeCode</td>
+                  <td class="small">application/pdf</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;">@filename</td>
+                  <td class="small">NKD_2026.pdf</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-125</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Attached document</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  ApplicableHeaderTradeDelivery<br></br>    ShipToTradeParty<br></br>      <strong>Name</strong></td>
+               <td class="small">Max u Monica Mieter GbR</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-70</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Deliver to party name</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeDelivery<br></br>  ShipToTradeParty<br></br>    PostalTradeAddress<br></br>      <strong>PostcodeCode</strong></td>
+               <td class="small">12346</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-78</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Deliver to post code</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeDelivery<br></br>  ShipToTradeParty<br></br>    PostalTradeAddress<br></br>      <strong>LineOne</strong></td>
+               <td class="small">Mieterstrasse 5</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-75</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Deliver to address line 1</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeDelivery<br></br>  ShipToTradeParty<br></br>    PostalTradeAddress<br></br>      <strong>LineTwo</strong></td>
+               <td class="small">2. OG</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-76</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Deliver to address line 2</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeDelivery<br></br>  ShipToTradeParty<br></br>    PostalTradeAddress<br></br>      <strong>CityName</strong></td>
+               <td class="small">Musterstadt</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-77</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Deliver to city</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeDelivery<br></br>  ShipToTradeParty<br></br>    PostalTradeAddress<br></br>      <strong>CountryID</strong></td>
+               <td class="small">DE</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-80</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Deliver to country code</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">CrossIndustryInvoice<br></br>  SupplyChainTradeTransaction<br></br>    ApplicableHeaderTradeSettlement<br></br>      <strong>CreditorReferenceID</strong></td>
+               <td class="small">DE78ZZZ00000099999</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-90</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Bank assigned creditor identifier</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">CrossIndustryInvoice<br></br>  SupplyChainTradeTransaction<br></br>    ApplicableHeaderTradeSettlement<br></br>      <strong>PaymentReference</strong></td>
+               <td class="small">Miete Max u Monica Mieter</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-83</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Remittance information</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">CrossIndustryInvoice<br></br>  SupplyChainTradeTransaction<br></br>    ApplicableHeaderTradeSettlement<br></br>      <strong>InvoiceCurrencyCode</strong></td>
+               <td class="small">EUR</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-5</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Invoice currency code</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  ApplicableHeaderTradeSettlement<br></br>    SpecifiedTradeSettlementPaymentMeans<br></br>      <strong>TypeCode</strong></td>
+               <td class="small">59</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-81</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Payment means type code</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  ApplicableHeaderTradeSettlement<br></br>    SpecifiedTradeSettlementPaymentMeans<br></br>      <strong>Information</strong></td>
+               <td class="small">Bezahlung per SEPA-Lastschrift *** Den Rechnungsbetrag ziehen wir mit der SEPA-Lastschrift
+                  von Ihrem Konto frühestens zum Fälligkeitstag ein.</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-82</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Payment means text</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeSettlement<br></br>  SpecifiedTradeSettlementPaymentMeans<br></br>    PayerPartyDebtorFinancialAccount<br></br>      <strong>IBANID</strong></td>
+               <td class="small">DE75512108001245126199</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-91</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Debited account identifier</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeSettlement<br></br>  SpecifiedTradeSettlementPaymentMeans<br></br>    PayeePartyCreditorFinancialAccount<br></br>      <strong>IBANID</strong></td>
+               <td class="small">DE89370400440532013000</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-84</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Payment account identifier</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeSettlement<br></br>  SpecifiedTradeSettlementPaymentMeans<br></br>    PayeeSpecifiedCreditorFinancialInstitution<br></br>      <strong>BICID</strong></td>
+               <td class="small">COBADEFFXXX</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-86</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Payment service provider identifier</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  ApplicableHeaderTradeSettlement<br></br>    ApplicableTradeTax<br></br>      <strong>CalculatedAmount</strong></td>
+               <td class="small">32.30</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-117</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">VAT category tax amount</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  ApplicableHeaderTradeSettlement<br></br>    ApplicableTradeTax<br></br>      <strong>TypeCode</strong></td>
+               <td class="small">VAT</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-118-0</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Type of tax (code)VAT category code, Content</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  ApplicableHeaderTradeSettlement<br></br>    ApplicableTradeTax<br></br>      <strong>BasisAmount</strong></td>
+               <td class="small">170.00</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-116</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">VAT category taxable amount</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  ApplicableHeaderTradeSettlement<br></br>    ApplicableTradeTax<br></br>      <strong>CategoryCode</strong></td>
+               <td class="small">S</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-118</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">VAT category code</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  ApplicableHeaderTradeSettlement<br></br>    ApplicableTradeTax<br></br>      <strong>RateApplicablePercent</strong></td>
+               <td class="small">19.00</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-119</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">VAT category rate</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  ApplicableHeaderTradeSettlement<br></br>    SpecifiedTradePaymentTerms<br></br>      <strong>Description</strong></td>
+               <td class="small">SEPA-Lastschrift zum 31.12.2026 ohne Abzug</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-20</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Payment terms</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">ApplicableHeaderTradeSettlement<br></br>  SpecifiedTradePaymentTerms<br></br>    DueDateDateTime<br></br>      <strong>DateTimeString</strong></td>
+               <td class="small">20261231</td>
+               <tr>
+                  <td class="code" style="text-align: right;">@format</td>
+                  <td class="small">102</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-9</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Payment due date</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  ApplicableHeaderTradeSettlement<br></br>    SpecifiedTradePaymentTerms<br></br>      <strong>DirectDebitMandateID</strong></td>
+               <td class="small">Miete Max u Monica Mieter GbR</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-89</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Mandate reference identifier</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  ApplicableHeaderTradeSettlement<br></br>    SpecifiedTradeSettlementHeaderMonetarySummation<br></br>      <strong>LineTotalAmount</strong></td>
+               <td class="small">170.00</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-106</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Sum of Invoice line net amount</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  ApplicableHeaderTradeSettlement<br></br>    SpecifiedTradeSettlementHeaderMonetarySummation<br></br>      <strong>AllowanceTotalAmount</strong></td>
+               <td class="small">0.00</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-107</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Sum of allowances on document level</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  ApplicableHeaderTradeSettlement<br></br>    SpecifiedTradeSettlementHeaderMonetarySummation<br></br>      <strong>TaxBasisTotalAmount</strong></td>
+               <td class="small">170.00</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-109</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Invoice total amount without VAT</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  ApplicableHeaderTradeSettlement<br></br>    SpecifiedTradeSettlementHeaderMonetarySummation<br></br>      <strong>TaxTotalAmount</strong></td>
+               <td class="small">32.30</td>
+               <tr>
+                  <td class="code" style="text-align: right;">@currencyID</td>
+                  <td class="small">EUR</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-110</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Invoice total VAT amount</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  ApplicableHeaderTradeSettlement<br></br>    SpecifiedTradeSettlementHeaderMonetarySummation<br></br>      <strong>GrandTotalAmount</strong></td>
+               <td class="small">202.30</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-112</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Invoice total amount with VAT</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  ApplicableHeaderTradeSettlement<br></br>    SpecifiedTradeSettlementHeaderMonetarySummation<br></br>      <strong>DuePayableAmount</strong></td>
+               <td class="small">202.30</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-115</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Amount due for payment</td>
+               </tr>
+            </tr>
+            <tr>
+               <td class="code">SupplyChainTradeTransaction<br></br>  ApplicableHeaderTradeSettlement<br></br>    InvoiceReferencedDocument<br></br>      <strong>IssuerAssignedID</strong></td>
+               <td class="small">600700800900</td>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_id</td>
+                  <td class="small">BT-25</td>
+               </tr>
+               <tr>
+                  <td class="code" style="text-align: right;color: blue;">Spec --&gt;spec_term_en</td>
+                  <td class="small">Preceding Invoice reference</td>
+               </tr>
+            </tr>
+         </tbody>
+      </table>
+   </body>
+</html>

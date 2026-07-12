@@ -1,0 +1,45 @@
+<vr:validationReport xmlns:vr="urn:valitool.org:validationreport:2p12">
+    <vr:fileName>/Users/bernd/local/dev/transformXml/xml/out/2.5.0_release/EN_16931/E22_Reisekosten/E22_01_Reisekosten_fx.pdf</vr:fileName>
+    <vr:documentNumber>280081</vr:documentNumber>
+    <vr:documentDateTime>20260508</vr:documentDateTime>
+    <vr:documentSeller>Lieferant GmbH</vr:documentSeller>
+    <vr:documentSellerCountry>DE</vr:documentSellerCountry>
+    <vr:checkDateTime>2026-06-09T21:59:27.118+02:00</vr:checkDateTime>
+    <vr:checkMode>COMPLETE</vr:checkMode>
+    <vr:languageCode>de</vr:languageCode>
+    <vr:checkerVersionXML>2026-06-08:3.26.2 with Config Version 2026/06/08 09:06:19, licensed for Demo (VALIDATION)</vr:checkerVersionXML>
+    <vr:checkerVersionPDF>Version 2025-10-10 V1.3</vr:checkerVersionPDF><vr:disclaimer>Bei dem Validierungsergebnis und der verbundenen Handlungsempfehlung handelt es sich weder um eine rechtliche, steuerrechtliche oder betriebswirtschaftliche Beratung, noch kann dadurch eine individuelle Beratung ersetzt werden. Bei der Umsetzung von valitool® sind wir laufend um höchste Sorgfalt bemüht, jedoch haftet valitool GmbH nicht für die Richtigkeit, Aktualität und Vollständigkeit der Informationen und Ergebnisse. Die Validierungsergebnisse und Handlungsempfehlungen sind nicht auf einen speziellen Sachverhalt einer Einzelperson oder einer juristischen Person bezogen, daher sollte im konkreten Einzelfall stets fachlicher Rat eingeholt werden. valitool GmbH übernimmt keinerlei Verantwortung für Entscheidungen, die der Nutzer von valitool® aufgrund der Validierungsergebnisse und Empfehlungen trifft.</vr:disclaimer>
+    <vr:isValid>true</vr:isValid>
+    <vr:validationDetailsPDF><vr:isValid>true</vr:isValid><vr:foundFlavour>PDF/A-3u</vr:foundFlavour></vr:validationDetailsPDF><vr:exitCode>0</vr:exitCode>
+    <vr:validationDetailsEmbedding>
+        <vr:isValidFileEmbedding>true</vr:isValidFileEmbedding>
+        <vr:isValidFilename>true</vr:isValidFilename>
+        <vr:isValidXMP>true</vr:isValidXMP>
+        <vr:canExtractXML>undefined</vr:canExtractXML>
+        <vr:guidelineFromXML>urn:cen.eu:en16931:2017</vr:guidelineFromXML>
+        <vr:versionFromXML>ZUGFeRD 2.x COMFORT, Factur-X 1.0x EN16931</vr:versionFromXML>
+        <vr:versionCode>EN-2017-C</vr:versionCode>
+        <vr:documentTypeFromXML>INVOICE</vr:documentTypeFromXML>
+        <vr:variantFromXML>EN16931</vr:variantFromXML>
+    </vr:validationDetailsEmbedding>
+    <vr:validationDetailsXML>
+        <vr:isValidXML>true</vr:isValidXML>
+        <vr:hasWarnings>false</vr:hasWarnings>
+        <vr:isValidSchema>true</vr:isValidSchema>
+        <vr:isValidNamespaces>true</vr:isValidNamespaces>
+        <vr:isValidEncoding>true</vr:isValidEncoding>
+        <vr:isValidCodelists>true</vr:isValidCodelists>
+        <vr:isValidFormat>true</vr:isValidFormat>
+        <vr:isValidVAT>true</vr:isValidVAT>
+        <vr:isValidBusinessRules>true</vr:isValidBusinessRules>
+        <vr:details>
+            <vr:errorCounter>1</vr:errorCounter>
+            <vr:errorType>3</vr:errorType>
+            <vr:errorCategory>4000</vr:errorCategory>
+            <vr:errorDescription>---Dies ist eine Demoversion von Valitool. Sie darf nur zu Testzwecken und nicht in einer produktiven Umgebung verwendet werden!</vr:errorDescription>
+            <vr:errorNumber>3007</vr:errorNumber>
+            <vr:errorCode/>
+            <vr:errorProfile>0</vr:errorProfile>
+        </vr:details>
+    </vr:validationDetailsXML>
+</vr:validationReport>

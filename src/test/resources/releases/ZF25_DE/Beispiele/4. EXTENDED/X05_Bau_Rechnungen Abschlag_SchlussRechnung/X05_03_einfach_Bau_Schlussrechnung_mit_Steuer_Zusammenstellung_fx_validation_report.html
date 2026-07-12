@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8"?><html xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:vr="urn:valitool.org:validationreport:2p12" xmlns:xsi="http://www.w3.org/2001/XMLSchema">
+   <head>
+      <title>eInvoice Validation Report</title>
+      <meta name="PDF.producer" content="DWC toolkit 1.0 and valitool"></meta>
+      <style>@page {
+    size: A4 portrait;
+    margin-left: 2cm;
+    margin-right: 2cm;
+    margin-top: 3cm;
+    margin-bottom: 1.5cm;
+    @bottom-right {
+        content: "Seite " counter(page) " von " counter(pages);
+        font-family: "Avenir Next";
+        font-size: 60%;
+    }
+    @top-left {
+        content: "Validierung eRechnung © DWC und validool UG, 2025";
+        font-family: "Avenir Next";
+        font-size: 60%;
+    }
+}
+
+.page-break {
+        page-break-after: always;
+    }
+.page-break-inside {
+    page-break-inside: avoid;
+}
+
+
+/**
+ * Page break definition
+ */
+
+.page-start {
+    -fs-page-sequence: start;
+    page-break-before: always;
+}
+
+
+/* format tables to meet the pagination */
+
+table {
+    -fs-table-paginate: paginate;
+    page-break-inside: avoid;
+}
+
+
+/* forces a page break, if needed */
+
+.break {
+    page-break-after: always
+}
+
+body {
+    width: 17cm;
+    font-family: "Avenir Next", sans-serif;
+    line-height: 1.17;
+    font-size: 70%;
+}
+
+b,
+strong {
+    font-weight: bold;
+}
+
+h1 {
+    margin: .67em 0;
+    font-size: 2em;
+}
+
+.small {
+    font-size: 60%;
+}
+
+img {
+    border: 0;
+}
+
+svg:not(:root) {
+    overflow: hidden;
+}
+
+figure {
+    margin: 1em 40px;
+}
+
+.condensed {
+    line-height: 80%;
+}
+
+.code {
+    font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
+    font-size: 70%;
+}
+
+.table {
+    border-spacing: 0;
+    border-collapse: collapse;
+    padding: 2px;
+    table-layout: fixed;
+    width: 17cm;
+}
+
+.table-striped>tbody>tr:nth-child(even) {
+    background-color: #f2f2f2
+}
+
+thead {
+    word-break: break-all;
+    background-color: rgb(193, 200, 241) !important;
+}
+
+td {
+    word-break: break-all;
+    padding: 2px;
+}
+
+.table-bordered {
+    border-top: 1px solid #ddd;
+}
+
+.tr-border {
+    border-bottom: 2px solid darkgrey;
+}
+
+.table-bordered>thead>tr>th,
+.table-bordered>tbody>tr>th,
+.table-bordered>tfoot>tr>th,
+.table-bordered>thead>tr>td,
+.table-bordered>tbody>tr>td,
+.table-bordered>tfoot>tr>td {
+    border-top: 1px solid #ddd;
+}
+
+.text-error {
+    background-color: red;
+    color: white;
+    font-weight: bold;
+}
+
+.text-error-light {
+    background-color: lightgray;
+    color: red;
+    font-weight: bold;
+}
+
+.text-success {
+    color: darkgreen;
+}
+
+.text-warning {
+    color: black;
+    font-weight: bold;
+    background-color: yellow;
+}
+
+.header-fill {
+    background: #f2f2f2;
+}
+</style>
+   </head>
+   <body bgcolor="#ffffff">
+      <h1>Validierungsbericht elektronische Rechnung</h1>
+      <p>© 2026 DWC and validool UG</p>
+      <h2>Kopfdaten</h2>
+      <table class="table table-striped table-bordered">
+         <tbody>
+            <tr>
+               <td style="width: 30%;">Geprüfte Datei</td>
+               <td style="width: 70%;word-wrap: break-word;">/Users/bernd/local/dev/transformXml/xml/out/2.5.0_release/EXTENDED/X05_Bau_Rechnungen
+                  Abschlag_SchlussRechnung/X05_03_einfach_Bau_Schlussrechnung_mit_Steuer_Zusammenstellung_fx.pdf</td>
+            </tr>
+            <tr>
+               <td>Belegnummer</td>
+               <td style="word-wrap: break-word;">210113</td>
+            </tr>
+            <tr>
+               <td>Belegdatum</td>
+               <td style="word-wrap: break-word;">20250630</td>
+            </tr>
+            <tr>
+               <td>Belegart</td>
+               <td style="word-wrap: break-word;">INVOICE</td>
+            </tr>
+            <tr>
+               <td>Verkäufer</td>
+               <td style="word-wrap: break-word;">Musterbetrieb AG Demodaten</td>
+            </tr>
+            <tr>
+               <td>Verkäuferland</td>
+               <td style="word-wrap: break-word;">DE</td>
+            </tr>
+            <tr>
+               <td>Profil</td>
+               <td>URN:CEN.EU:EN16931:2017#CONFORMANT#URN:FACTUR-X.EU:1P0:EXTENDED</td>
+            </tr>
+            <tr>
+               <td>Version der Spezifikation aus XML</td>
+               <td>ZUGFeRD 2.3.x, Factur-X 1.07.x EXTENDED</td>
+            </tr>
+            <tr>
+               <td>Versionscode</td>
+               <td>FX-1p0p7-E</td>
+            </tr>
+            <tr>
+               <td>Variante</td>
+               <td>EXTENDED</td>
+            </tr>
+            <tr>
+               <td>Prüfzeitpunkt</td>
+               <td>09.06.2026-21:59</td>
+            </tr>
+            <tr>
+               <td>Render-Zeitpunkt</td>
+               <td>2026-06-09T21:59:53.63506+02:00</td>
+            </tr>
+            <tr>
+               <td>Überprüfungsumfang</td>
+               <td>COMPLETE</td>
+            </tr>
+            <tr>
+               <td>Version der PDF/A Validierung</td>
+               <td>Version 2025-10-10 V1.3</td>
+            </tr>
+            <tr>
+               <td>Rendering-Version</td>
+               <td>Version 1.3 2026-02-04_20-00</td>
+            </tr>
+            <tr>
+               <td>Version der XML Validierung</td>
+               <td style="word-break: break-all;">2026-06-08:3.26.2 with Config Version 2026/06/08 09:06:19, licensed for Demo (VALIDATION)</td>
+            </tr>
+         </tbody>
+         <tfoot>
+            <tr>
+               <td style="width: 30%;"><strong>Gesamt-Validierungsergebnis</strong></td>
+               <td style="width: 70%;"><b><span class="text-success">GÜLTIGE
+                        eRechnung
+                        </span></b></td>
+            </tr>
+         </tfoot>
+      </table>
+      <h2>Ergebnisse der Validierung</h2>
+      <h3 style="margin-bottom:0px;">1) PDF/A Konformität</h3>
+      <table class="table table-striped table-bordered">
+         <tbody>
+            <tr>
+               <td style="width: 30%;">PDF/A Konformität</td>
+               <td style="width: 70%;"><b><span class="text-success">VALID</span></b></td>
+            </tr>
+            <tr>
+               <td>PDF Flavour</td>
+               <td>PDF/A-3u</td>
+            </tr>
+         </tbody>
+      </table>
+      <h3 style="margin-bottom:0px;">2) Einbettung XML-Rechnung in PDF/A-3</h3>
+      <table class="table table-striped table-bordered">
+         <tbody>
+            <tr>
+               <td style="width: 30%;">Korrekte Dateieinbettung</td>
+               <td style="width: 70%;"><b><span class="text-success">OK</span></b></td>
+            </tr>
+            <tr>
+               <td>Korrekte XMP-Metadaten</td>
+               <td><b><span class="text-success">OK</span></b></td>
+            </tr>
+            <tr>
+               <td>Korrekter Einbettungsname</td>
+               <td><b><span class="text-success">OK</span></b></td>
+            </tr>
+         </tbody>
+      </table>
+      <h3 style="margin-bottom:0px;">3) Validierung der XML-Rechnungsdaten</h3>
+      <table class="table table-striped table-bordered">
+         <tbody>
+            <tr>
+               <td style="width: 30%;">Korrekte XML-Struktur</td>
+               <td style="width: 70%;"><b><span class="text-success">OK  mit Warnungen</span></b></td>
+            </tr>
+            <tr>
+               <td>Korrektes XML-Schema</td>
+               <td><b><span class="text-success">OK</span></b></td>
+            </tr>
+            <tr>
+               <td>Korrekte XML-Namespaces</td>
+               <td><b><span class="text-success">OK</span></b></td>
+            </tr>
+            <tr>
+               <td>Korrektes XML-Encoding</td>
+               <td><b><span class="text-success">OK</span></b></td>
+            </tr>
+            <tr>
+               <td>Korrekte Codelisten</td>
+               <td><b><span class="text-success">OK</span></b></td>
+            </tr>
+            <tr>
+               <td>Korrektes Format</td>
+               <td><b><span class="text-success">OK</span></b></td>
+            </tr>
+            <tr>
+               <td>UStG-konformer Inhalt</td>
+               <td><b><span class="text-success">OK</span></b></td>
+            </tr>
+            <tr>
+               <td>Inhalt konform zu Geschäftsregeln</td>
+               <td><b><span class="text-success">OK</span></b></td>
+            </tr>
+            <tr>
+               <td>Liegen Warnungen vor?</td>
+               <td><b><span class="text-success">Nein</span></b></td>
+            </tr>
+         </tbody>
+      </table>
+      <h4 style="margin-bottom:0px;">Detail-Auswertung</h4>
+      <table class="table">
+         <thead>
+            <tr>
+               <td style="width: 10%;">Nr.</td>
+               <td style="width: 15%;">Kategorie</td>
+               <td style="width: 75%;">Wert</td>
+            </tr>
+         </thead>
+         <tbody>
+            <table style="border: 1px solid black;">
+               <tr>
+                  <td class="small" style="width: 10%;" rowspan="7">1</td>
+                  <td class="small" style="width: 15%;">
+                     <div>Information</div>
+                  </td>
+                  <td class="small" style="width: 75%;">3007</td>
+               </tr>
+               <tr class="header-fill">
+                  <td class="small">
+                     Fehlerkategorie
+                     </td>
+                  <td class="small"><strong>4000</strong></td>
+               </tr>
+               <tr>
+                  <td class="small">Beschreibung</td>
+                  <td class="small" style="padding: 0px 30px 0px 0px;">---Dies ist eine Demoversion von Valitool. Sie darf nur zu Testzwecken und nicht in
+                     einer produktiven Umgebung verwendet werden!</td>
+               </tr>
+               <tr>
+                  <td class="small">Position</td>
+                  <td class="small" style="padding: 0px 30px 0px 0px;">Zeile:   Spalte: </td>
+               </tr>
+               <tr>
+                  <td class="small">Betroffene BTs</td>
+                  <td class="small" style="padding: 0px 30px 0px 0px;"></td>
+               </tr>
+               <tr class="header-fill">
+                  <td class="small">XML-Pfad</td>
+                  <td>
+                     <div class="code"></div>
+                  </td>
+               </tr>
+               <tr class="header-fill">
+                  <td class="small">Business Terms</td>
+                  <td>
+                     <div class="code"></div>
+                  </td>
+               </tr>
+            </table>
+         </tbody>
+      </table>
+   </body>
+</html>
