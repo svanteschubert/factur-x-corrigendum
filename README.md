@@ -42,3 +42,23 @@ The Maven coordinates are `com.schubert-consulting.factur-x:factur-x-corrigendum
 
 The validators are generated separately for ZF25 DE, ZF25 EN, FINAL DE, FINAL
 EN, and FINAL FR with the plugin's `de`, `en`, and `fr` language settings.
+
+## Normalized generator overlays
+
+`overlays/` contains compact comparison overlays, not additional copies of the
+432 MB release tree. Each overlay mirrors only the XSLT paths that it would
+replace below `src/test/resources/releases/`:
+
+- [`factur-x-github-de`](overlays/factur-x-github-de/README.md) compares the
+  five ZF25 DE profile XSLT with the current local Mustang working tree.
+- [`ph-schematron`](overlays/ph-schematron/README.md) compares all 25 XSLT
+  with this project's PH Schematron Maven build for DE, EN, and FR.
+
+Both overlays are XML Canonicalization 1.0 output without comments, produced
+with `xmllint --c14n` and trailing horizontal whitespace removal. This removes representation-level XML noise for
+comparison. The original release files are not normalized or modified.
+
+Use `scripts/prepare-overlay-history.sh` to create a two-commit history for
+each overlay: a normalized `master` baseline and a normalized overwrite. The
+script never commits; each history step remains available for review and a
+user-signed commit.
