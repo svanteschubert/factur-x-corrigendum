@@ -485,20 +485,6 @@
         <xsl:apply-templates></xsl:apply-templates>
       </svrl:active-pattern>
       <xsl:apply-templates mode="M50" select="/"></xsl:apply-templates>
-      <svrl:active-pattern>
-        <xsl:attribute name="document">
-          <xsl:value-of select="document-uri(/)"></xsl:value-of>
-        </xsl:attribute>
-        <xsl:apply-templates></xsl:apply-templates>
-      </svrl:active-pattern>
-      <xsl:apply-templates mode="M51" select="/"></xsl:apply-templates>
-      <svrl:active-pattern>
-        <xsl:attribute name="document">
-          <xsl:value-of select="document-uri(/)"></xsl:value-of>
-        </xsl:attribute>
-        <xsl:apply-templates></xsl:apply-templates>
-      </svrl:active-pattern>
-      <xsl:apply-templates mode="M52" select="/"></xsl:apply-templates>
     </svrl:schematron-output>
   </xsl:template>
 
@@ -728,36 +714,7 @@
 
 
 	<!--RULE -->
-<xsl:template match="//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='Z'][upper-case(ram:TypeCode) = 'VAT']" mode="M8" priority="1000">
-    <svrl:fired-rule context="//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='Z'][upper-case(ram:TypeCode) = 'VAT']"></svrl:fired-rule>
-
-		<!--ASSERT -->
-<xsl:choose>
-      <xsl:when test="(for  &#xD;&#xA;        $rate in xs:decimal(ram:RateApplicablePercent),&#xD;&#xA;        $exempReasonText in normalize-space(ram:ExemptionReason),&#xD;&#xA;        $exempReasonCode in normalize-space(ram:ExemptionReasonCode),&#xD;&#xA;        $basisAmount in xs:decimal(ram:BasisAmount),&#xD;&#xA;        $calculatedAmountBT131 in xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeSettlement[ram:ApplicableTradeTax/ram:CategoryCode = 'Z' and ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate and normalize-space(ram:ApplicableTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:ApplicableTradeTax/ram:ExemptionReason) = $exempReasonText]/ram:SpecifiedTradeSettlementLineMonetarySummation/xs:decimal(ram:LineTotalAmount)) * 100) div 100),&#xD;&#xA;        $allowancesAmountBT92 in xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=false() and ram:CategoryTradeTax/ram:CategoryCode='Z' and ram:CategoryTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate and normalize-space(ram:CategoryTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:CategoryTradeTax/ram:ExemptionReason) = $exempReasonText]/xs:decimal(ram:ActualAmount)) * 100) div 100),&#xD;&#xA;        $chargesAmountBT99 in xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=true() and ram:CategoryTradeTax/ram:CategoryCode='Z' and ram:CategoryTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate and normalize-space(ram:CategoryTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:CategoryTradeTax/ram:ExemptionReason) = $exempReasonText]/xs:decimal(ram:ActualAmount)) * 100) div 100),&#xD;&#xA;        $nbLineItems in xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode = 'Z' and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate and normalize-space(ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:ExemptionReason) = $exempReasonText])),&#xD;&#xA;        $nbAllowancesOrCharges in xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:CategoryTradeTax/ram:CategoryCode='Z' and ram:CategoryTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate  and normalize-space(ram:CategoryTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:CategoryTradeTax/ram:ExemptionReason) = $exempReasonText])),&#xD;&#xA;        $logisticChargeAmount in xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge[ram:AppliedTradeTax/ram:CategoryCode='Z' and ram:AppliedTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate and normalize-space(ram:AppliedTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:AppliedTradeTax/ram:ExemptionReason) = $exempReasonText]/xs:decimal(ram:AppliedAmount)) * 100) div 100),&#xD;&#xA;        $nblogisticCharge in xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge[ram:AppliedTradeTax/ram:CategoryCode='Z' and ram:AppliedTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate and normalize-space(ram:AppliedTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:AppliedTradeTax/ram:ExemptionReason) = $exempReasonText]))&#xD;&#xA;        return      &#xD;&#xA;        abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99 - $logisticChargeAmount) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges + $nblogisticCharge))"></xsl:when>
-      <xsl:otherwise>
-        <svrl:failed-assert test="(for $rate in xs:decimal(ram:RateApplicablePercent), $exempReasonText in normalize-space(ram:ExemptionReason), $exempReasonCode in normalize-space(ram:ExemptionReasonCode), $basisAmount in xs:decimal(ram:BasisAmount), $calculatedAmountBT131 in xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeSettlement[ram:ApplicableTradeTax/ram:CategoryCode = 'Z' and ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate and normalize-space(ram:ApplicableTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:ApplicableTradeTax/ram:ExemptionReason) = $exempReasonText]/ram:SpecifiedTradeSettlementLineMonetarySummation/xs:decimal(ram:LineTotalAmount)) * 100) div 100), $allowancesAmountBT92 in xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=false() and ram:CategoryTradeTax/ram:CategoryCode='Z' and ram:CategoryTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate and normalize-space(ram:CategoryTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:CategoryTradeTax/ram:ExemptionReason) = $exempReasonText]/xs:decimal(ram:ActualAmount)) * 100) div 100), $chargesAmountBT99 in xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=true() and ram:CategoryTradeTax/ram:CategoryCode='Z' and ram:CategoryTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate and normalize-space(ram:CategoryTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:CategoryTradeTax/ram:ExemptionReason) = $exempReasonText]/xs:decimal(ram:ActualAmount)) * 100) div 100), $nbLineItems in xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode = 'Z' and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate and normalize-space(ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:ExemptionReason) = $exempReasonText])), $nbAllowancesOrCharges in xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:CategoryTradeTax/ram:CategoryCode='Z' and ram:CategoryTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate and normalize-space(ram:CategoryTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:CategoryTradeTax/ram:ExemptionReason) = $exempReasonText])), $logisticChargeAmount in xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge[ram:AppliedTradeTax/ram:CategoryCode='Z' and ram:AppliedTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate and normalize-space(ram:AppliedTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:AppliedTradeTax/ram:ExemptionReason) = $exempReasonText]/xs:decimal(ram:AppliedAmount)) * 100) div 100), $nblogisticCharge in xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge[ram:AppliedTradeTax/ram:CategoryCode='Z' and ram:AppliedTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate and normalize-space(ram:AppliedTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:AppliedTradeTax/ram:ExemptionReason) = $exempReasonText])) return abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99 - $logisticChargeAmount) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges + $nblogisticCharge))">
-          <xsl:attribute name="id">FX-SCH-A-000399</xsl:attribute>
-          <xsl:attribute name="flag">warning</xsl:attribute>
-          <xsl:attribute name="location">
-            <xsl:apply-templates mode="schematron-select-full-path" select="."></xsl:apply-templates>
-          </xsl:attribute>
-          <svrl:text>
-	[BR-FXEXT-Z-08rev] - With Exemption reason EN16931_2026  - In a VAT breakdown (BG-23) where VAT category code (BT-118) is equal to “Z” ("Zero Rated"), Absolute Value of (VAT category taxable amount (BT-116) - ∑ Invoice line net amounts (BT-131) + Σ Document level allowance amounts (BT-92) - Σ Document level charge amounts (BT-99) - Σ Logistics Service fee amounts (BT-X-272)) &lt;= 0,01 * ((Number of line net amounts (BT-131) + Number of Document level allowance amounts (BT-92) + Number of Document level charge amounts (BT-99) + Number of Logistics Service fee amounts (BT-X-272)), where the VAT category code (BT-151, BT-95, BT-102, BT-X-273) is "Zero Rated" (Z).</svrl:text>
-        </svrl:failed-assert>
-      </xsl:otherwise>
-    </xsl:choose>
-    <xsl:apply-templates mode="M8" select="@*|*"></xsl:apply-templates>
-  </xsl:template>
-  <xsl:template match="text()" mode="M8" priority="-1"></xsl:template>
-  <xsl:template match="@*|node()" mode="M8" priority="-2">
-    <xsl:apply-templates mode="M8" select="@*|*"></xsl:apply-templates>
-  </xsl:template>
-
-<!--PATTERN -->
-
-
-	<!--RULE -->
-<xsl:template match="//ram:ApplicableHeaderTradeSettlement/ram:BillingSpecifiedPeriod" mode="M9" priority="1000">
+<xsl:template match="//ram:ApplicableHeaderTradeSettlement/ram:BillingSpecifiedPeriod" mode="M8" priority="1000">
     <svrl:fired-rule context="//ram:ApplicableHeaderTradeSettlement/ram:BillingSpecifiedPeriod"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -774,33 +731,18 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-
-		<!--ASSERT -->
-<xsl:choose>
-      <xsl:when test="(ram:StartDateTime) or (ram:EndDateTime)"></xsl:when>
-      <xsl:otherwise>
-        <svrl:failed-assert test="(ram:StartDateTime) or (ram:EndDateTime)">
-          <xsl:attribute name="id">FX-SCH-A-000060</xsl:attribute>
-          <xsl:attribute name="location">
-            <xsl:apply-templates mode="schematron-select-full-path" select="."></xsl:apply-templates>
-          </xsl:attribute>
-          <svrl:text>
-	[BR-CO-19]-If Invoicing period (BG-14) is used, the Invoicing period start date (BT-73) or the Invoicing period end date (BT-74) shall be filled, or both.</svrl:text>
-        </svrl:failed-assert>
-      </xsl:otherwise>
-    </xsl:choose>
-    <xsl:apply-templates mode="M9" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M8" select="@*|*"></xsl:apply-templates>
   </xsl:template>
-  <xsl:template match="text()" mode="M9" priority="-1"></xsl:template>
-  <xsl:template match="@*|node()" mode="M9" priority="-2">
-    <xsl:apply-templates mode="M9" select="@*|*"></xsl:apply-templates>
+  <xsl:template match="text()" mode="M8" priority="-1"></xsl:template>
+  <xsl:template match="@*|node()" mode="M8" priority="-2">
+    <xsl:apply-templates mode="M8" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 <!--PATTERN -->
 
 
 	<!--RULE -->
-<xsl:template match="//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge/ram:ChargeIndicator[udt:Indicator='false']" mode="M10" priority="1000">
+<xsl:template match="//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge/ram:ChargeIndicator[udt:Indicator='false']" mode="M9" priority="1000">
     <svrl:fired-rule context="//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge/ram:ChargeIndicator[udt:Indicator='false']"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -907,18 +849,18 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M10" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M9" select="@*|*"></xsl:apply-templates>
   </xsl:template>
-  <xsl:template match="text()" mode="M10" priority="-1"></xsl:template>
-  <xsl:template match="@*|node()" mode="M10" priority="-2">
-    <xsl:apply-templates mode="M10" select="@*|*"></xsl:apply-templates>
+  <xsl:template match="text()" mode="M9" priority="-1"></xsl:template>
+  <xsl:template match="@*|node()" mode="M9" priority="-2">
+    <xsl:apply-templates mode="M9" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 <!--PATTERN -->
 
 
 	<!--RULE -->
-<xsl:template match="//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge/ram:ChargeIndicator[udt:Indicator='true']" mode="M11" priority="1000">
+<xsl:template match="//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge/ram:ChargeIndicator[udt:Indicator='true']" mode="M10" priority="1000">
     <svrl:fired-rule context="//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge/ram:ChargeIndicator[udt:Indicator='true']"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -1025,46 +967,18 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M11" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M10" select="@*|*"></xsl:apply-templates>
   </xsl:template>
-  <xsl:template match="text()" mode="M11" priority="-1"></xsl:template>
-  <xsl:template match="@*|node()" mode="M11" priority="-2">
-    <xsl:apply-templates mode="M11" select="@*|*"></xsl:apply-templates>
-  </xsl:template>
-
-<!--PATTERN -->
-
-
-	<!--RULE -->
-<xsl:template match="//ram:ApplicableTradeSettlementFinancialCard" mode="M12" priority="1000">
-    <svrl:fired-rule context="//ram:ApplicableTradeSettlementFinancialCard"></svrl:fired-rule>
-
-		<!--ASSERT -->
-<xsl:choose>
-      <xsl:when test="string-length(normalize-space(ram:ID)) &lt;= 10"></xsl:when>
-      <xsl:otherwise>
-        <svrl:failed-assert test="string-length(normalize-space(ram:ID)) &lt;= 10">
-          <xsl:attribute name="id">FX-SCH-A-000281</xsl:attribute>
-          <xsl:attribute name="location">
-            <xsl:apply-templates mode="schematron-select-full-path" select="."></xsl:apply-templates>
-          </xsl:attribute>
-          <svrl:text>
-	[BR-51]-In accordance with card payments security standards an invoice should never include a full card primary account number (BT-87). At the moment PCI Security Standards Council has defined that the first 6 digits and last 4 digits are the maximum number of digits to be shown.</svrl:text>
-        </svrl:failed-assert>
-      </xsl:otherwise>
-    </xsl:choose>
-    <xsl:apply-templates mode="M12" select="@*|*"></xsl:apply-templates>
-  </xsl:template>
-  <xsl:template match="text()" mode="M12" priority="-1"></xsl:template>
-  <xsl:template match="@*|node()" mode="M12" priority="-2">
-    <xsl:apply-templates mode="M12" select="@*|*"></xsl:apply-templates>
+  <xsl:template match="text()" mode="M10" priority="-1"></xsl:template>
+  <xsl:template match="@*|node()" mode="M10" priority="-2">
+    <xsl:apply-templates mode="M10" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 <!--PATTERN -->
 
 
 	<!--RULE -->
-<xsl:template match="//ram:PayeeTradeParty" mode="M13" priority="1000">
+<xsl:template match="//ram:PayeeTradeParty" mode="M11" priority="1000">
     <svrl:fired-rule context="//ram:PayeeTradeParty"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -1081,18 +995,18 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M13" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M11" select="@*|*"></xsl:apply-templates>
   </xsl:template>
-  <xsl:template match="text()" mode="M13" priority="-1"></xsl:template>
-  <xsl:template match="@*|node()" mode="M13" priority="-2">
-    <xsl:apply-templates mode="M13" select="@*|*"></xsl:apply-templates>
+  <xsl:template match="text()" mode="M11" priority="-1"></xsl:template>
+  <xsl:template match="@*|node()" mode="M11" priority="-2">
+    <xsl:apply-templates mode="M11" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 <!--PATTERN -->
 
 
 	<!--RULE -->
-<xsl:template match="//ram:SellerTaxRepresentativeTradeParty" mode="M14" priority="1000">
+<xsl:template match="//ram:SellerTaxRepresentativeTradeParty" mode="M12" priority="1000">
     <svrl:fired-rule context="//ram:SellerTaxRepresentativeTradeParty"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -1154,18 +1068,18 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M14" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M12" select="@*|*"></xsl:apply-templates>
   </xsl:template>
-  <xsl:template match="text()" mode="M14" priority="-1"></xsl:template>
-  <xsl:template match="@*|node()" mode="M14" priority="-2">
-    <xsl:apply-templates mode="M14" select="@*|*"></xsl:apply-templates>
+  <xsl:template match="text()" mode="M12" priority="-1"></xsl:template>
+  <xsl:template match="@*|node()" mode="M12" priority="-2">
+    <xsl:apply-templates mode="M12" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 <!--PATTERN -->
 
 
 	<!--RULE -->
-<xsl:template match="//ram:SellerTradeParty" mode="M15" priority="1000">
+<xsl:template match="//ram:SellerTradeParty" mode="M13" priority="1000">
     <svrl:fired-rule context="//ram:SellerTradeParty"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -1182,18 +1096,18 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M15" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M13" select="@*|*"></xsl:apply-templates>
   </xsl:template>
-  <xsl:template match="text()" mode="M15" priority="-1"></xsl:template>
-  <xsl:template match="@*|node()" mode="M15" priority="-2">
-    <xsl:apply-templates mode="M15" select="@*|*"></xsl:apply-templates>
+  <xsl:template match="text()" mode="M13" priority="-1"></xsl:template>
+  <xsl:template match="@*|node()" mode="M13" priority="-2">
+    <xsl:apply-templates mode="M13" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 <!--PATTERN -->
 
 
 	<!--RULE -->
-<xsl:template match="//ram:SpecifiedTaxRegistration/ram:ID[@schemeID='VA']" mode="M16" priority="1000">
+<xsl:template match="//ram:SpecifiedTaxRegistration/ram:ID[@schemeID='VA']" mode="M14" priority="1000">
     <svrl:fired-rule context="//ram:SpecifiedTaxRegistration/ram:ID[@schemeID='VA']"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -1210,18 +1124,18 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M16" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M14" select="@*|*"></xsl:apply-templates>
   </xsl:template>
-  <xsl:template match="text()" mode="M16" priority="-1"></xsl:template>
-  <xsl:template match="@*|node()" mode="M16" priority="-2">
-    <xsl:apply-templates mode="M16" select="@*|*"></xsl:apply-templates>
+  <xsl:template match="text()" mode="M14" priority="-1"></xsl:template>
+  <xsl:template match="@*|node()" mode="M14" priority="-2">
+    <xsl:apply-templates mode="M14" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 <!--PATTERN -->
 
 
 	<!--RULE -->
-<xsl:template match="//ram:SpecifiedTradeAllowanceCharge" mode="M17" priority="1000">
+<xsl:template match="//ram:SpecifiedTradeAllowanceCharge" mode="M15" priority="1000">
     <svrl:fired-rule context="//ram:SpecifiedTradeAllowanceCharge"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -1238,18 +1152,18 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M17" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M15" select="@*|*"></xsl:apply-templates>
   </xsl:template>
-  <xsl:template match="text()" mode="M17" priority="-1"></xsl:template>
-  <xsl:template match="@*|node()" mode="M17" priority="-2">
-    <xsl:apply-templates mode="M17" select="@*|*"></xsl:apply-templates>
+  <xsl:template match="text()" mode="M15" priority="-1"></xsl:template>
+  <xsl:template match="@*|node()" mode="M15" priority="-2">
+    <xsl:apply-templates mode="M15" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 <!--PATTERN -->
 
 
 	<!--RULE -->
-<xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false']/ram:CategoryTradeTax[ram:CategoryCode = 'AE']" mode="M18" priority="1000">
+<xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false']/ram:CategoryTradeTax[ram:CategoryCode = 'AE']" mode="M16" priority="1000">
     <svrl:fired-rule context="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false']/ram:CategoryTradeTax[ram:CategoryCode = 'AE']"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -1281,18 +1195,18 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M18" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M16" select="@*|*"></xsl:apply-templates>
   </xsl:template>
-  <xsl:template match="text()" mode="M18" priority="-1"></xsl:template>
-  <xsl:template match="@*|node()" mode="M18" priority="-2">
-    <xsl:apply-templates mode="M18" select="@*|*"></xsl:apply-templates>
+  <xsl:template match="text()" mode="M16" priority="-1"></xsl:template>
+  <xsl:template match="@*|node()" mode="M16" priority="-2">
+    <xsl:apply-templates mode="M16" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 <!--PATTERN -->
 
 
 	<!--RULE -->
-<xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false']/ram:CategoryTradeTax[ram:CategoryCode = 'E']" mode="M19" priority="1000">
+<xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false']/ram:CategoryTradeTax[ram:CategoryCode = 'E']" mode="M17" priority="1000">
     <svrl:fired-rule context="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false']/ram:CategoryTradeTax[ram:CategoryCode = 'E']"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -1324,18 +1238,18 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M19" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M17" select="@*|*"></xsl:apply-templates>
   </xsl:template>
-  <xsl:template match="text()" mode="M19" priority="-1"></xsl:template>
-  <xsl:template match="@*|node()" mode="M19" priority="-2">
-    <xsl:apply-templates mode="M19" select="@*|*"></xsl:apply-templates>
+  <xsl:template match="text()" mode="M17" priority="-1"></xsl:template>
+  <xsl:template match="@*|node()" mode="M17" priority="-2">
+    <xsl:apply-templates mode="M17" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 <!--PATTERN -->
 
 
 	<!--RULE -->
-<xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false']/ram:CategoryTradeTax[ram:CategoryCode = 'G']" mode="M20" priority="1000">
+<xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false']/ram:CategoryTradeTax[ram:CategoryCode = 'G']" mode="M18" priority="1000">
     <svrl:fired-rule context="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false']/ram:CategoryTradeTax[ram:CategoryCode = 'G']"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -1367,18 +1281,18 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M20" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M18" select="@*|*"></xsl:apply-templates>
   </xsl:template>
-  <xsl:template match="text()" mode="M20" priority="-1"></xsl:template>
-  <xsl:template match="@*|node()" mode="M20" priority="-2">
-    <xsl:apply-templates mode="M20" select="@*|*"></xsl:apply-templates>
+  <xsl:template match="text()" mode="M18" priority="-1"></xsl:template>
+  <xsl:template match="@*|node()" mode="M18" priority="-2">
+    <xsl:apply-templates mode="M18" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 <!--PATTERN -->
 
 
 	<!--RULE -->
-<xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false']/ram:CategoryTradeTax[ram:CategoryCode = 'K']" mode="M21" priority="1000">
+<xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false']/ram:CategoryTradeTax[ram:CategoryCode = 'K']" mode="M19" priority="1000">
     <svrl:fired-rule context="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false']/ram:CategoryTradeTax[ram:CategoryCode = 'K']"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -1410,18 +1324,18 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M21" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M19" select="@*|*"></xsl:apply-templates>
   </xsl:template>
-  <xsl:template match="text()" mode="M21" priority="-1"></xsl:template>
-  <xsl:template match="@*|node()" mode="M21" priority="-2">
-    <xsl:apply-templates mode="M21" select="@*|*"></xsl:apply-templates>
+  <xsl:template match="text()" mode="M19" priority="-1"></xsl:template>
+  <xsl:template match="@*|node()" mode="M19" priority="-2">
+    <xsl:apply-templates mode="M19" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 <!--PATTERN -->
 
 
 	<!--RULE -->
-<xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false']/ram:CategoryTradeTax[ram:CategoryCode = 'L']" mode="M22" priority="1000">
+<xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false']/ram:CategoryTradeTax[ram:CategoryCode = 'L']" mode="M20" priority="1000">
     <svrl:fired-rule context="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false']/ram:CategoryTradeTax[ram:CategoryCode = 'L']"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -1453,18 +1367,18 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M22" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M20" select="@*|*"></xsl:apply-templates>
   </xsl:template>
-  <xsl:template match="text()" mode="M22" priority="-1"></xsl:template>
-  <xsl:template match="@*|node()" mode="M22" priority="-2">
-    <xsl:apply-templates mode="M22" select="@*|*"></xsl:apply-templates>
+  <xsl:template match="text()" mode="M20" priority="-1"></xsl:template>
+  <xsl:template match="@*|node()" mode="M20" priority="-2">
+    <xsl:apply-templates mode="M20" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 <!--PATTERN -->
 
 
 	<!--RULE -->
-<xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false']/ram:CategoryTradeTax[ram:CategoryCode = 'M']" mode="M23" priority="1000">
+<xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false']/ram:CategoryTradeTax[ram:CategoryCode = 'M']" mode="M21" priority="1000">
     <svrl:fired-rule context="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false']/ram:CategoryTradeTax[ram:CategoryCode = 'M']"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -1496,18 +1410,18 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M23" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M21" select="@*|*"></xsl:apply-templates>
   </xsl:template>
-  <xsl:template match="text()" mode="M23" priority="-1"></xsl:template>
-  <xsl:template match="@*|node()" mode="M23" priority="-2">
-    <xsl:apply-templates mode="M23" select="@*|*"></xsl:apply-templates>
+  <xsl:template match="text()" mode="M21" priority="-1"></xsl:template>
+  <xsl:template match="@*|node()" mode="M21" priority="-2">
+    <xsl:apply-templates mode="M21" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 <!--PATTERN -->
 
 
 	<!--RULE -->
-<xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false']/ram:CategoryTradeTax[ram:CategoryCode = 'O']" mode="M24" priority="1000">
+<xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false']/ram:CategoryTradeTax[ram:CategoryCode = 'O']" mode="M22" priority="1000">
     <svrl:fired-rule context="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false']/ram:CategoryTradeTax[ram:CategoryCode = 'O']"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -1539,18 +1453,18 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M24" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M22" select="@*|*"></xsl:apply-templates>
   </xsl:template>
-  <xsl:template match="text()" mode="M24" priority="-1"></xsl:template>
-  <xsl:template match="@*|node()" mode="M24" priority="-2">
-    <xsl:apply-templates mode="M24" select="@*|*"></xsl:apply-templates>
+  <xsl:template match="text()" mode="M22" priority="-1"></xsl:template>
+  <xsl:template match="@*|node()" mode="M22" priority="-2">
+    <xsl:apply-templates mode="M22" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 <!--PATTERN -->
 
 
 	<!--RULE -->
-<xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false']/ram:CategoryTradeTax[ram:CategoryCode = 'S']" mode="M25" priority="1000">
+<xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false']/ram:CategoryTradeTax[ram:CategoryCode = 'S']" mode="M23" priority="1000">
     <svrl:fired-rule context="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false']/ram:CategoryTradeTax[ram:CategoryCode = 'S']"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -1582,18 +1496,18 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M25" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M23" select="@*|*"></xsl:apply-templates>
   </xsl:template>
-  <xsl:template match="text()" mode="M25" priority="-1"></xsl:template>
-  <xsl:template match="@*|node()" mode="M25" priority="-2">
-    <xsl:apply-templates mode="M25" select="@*|*"></xsl:apply-templates>
+  <xsl:template match="text()" mode="M23" priority="-1"></xsl:template>
+  <xsl:template match="@*|node()" mode="M23" priority="-2">
+    <xsl:apply-templates mode="M23" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 <!--PATTERN -->
 
 
 	<!--RULE -->
-<xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false']/ram:CategoryTradeTax[ram:CategoryCode = 'Z']" mode="M26" priority="1000">
+<xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false']/ram:CategoryTradeTax[ram:CategoryCode = 'Z']" mode="M24" priority="1000">
     <svrl:fired-rule context="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false']/ram:CategoryTradeTax[ram:CategoryCode = 'Z']"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -1625,18 +1539,18 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M26" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M24" select="@*|*"></xsl:apply-templates>
   </xsl:template>
-  <xsl:template match="text()" mode="M26" priority="-1"></xsl:template>
-  <xsl:template match="@*|node()" mode="M26" priority="-2">
-    <xsl:apply-templates mode="M26" select="@*|*"></xsl:apply-templates>
+  <xsl:template match="text()" mode="M24" priority="-1"></xsl:template>
+  <xsl:template match="@*|node()" mode="M24" priority="-2">
+    <xsl:apply-templates mode="M24" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 <!--PATTERN -->
 
 
 	<!--RULE -->
-<xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true']/ram:CategoryTradeTax[ram:CategoryCode = 'AE']" mode="M27" priority="1000">
+<xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true']/ram:CategoryTradeTax[ram:CategoryCode = 'AE']" mode="M25" priority="1000">
     <svrl:fired-rule context="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true']/ram:CategoryTradeTax[ram:CategoryCode = 'AE']"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -1668,18 +1582,18 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M27" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M25" select="@*|*"></xsl:apply-templates>
   </xsl:template>
-  <xsl:template match="text()" mode="M27" priority="-1"></xsl:template>
-  <xsl:template match="@*|node()" mode="M27" priority="-2">
-    <xsl:apply-templates mode="M27" select="@*|*"></xsl:apply-templates>
+  <xsl:template match="text()" mode="M25" priority="-1"></xsl:template>
+  <xsl:template match="@*|node()" mode="M25" priority="-2">
+    <xsl:apply-templates mode="M25" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 <!--PATTERN -->
 
 
 	<!--RULE -->
-<xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true']/ram:CategoryTradeTax[ram:CategoryCode = 'E']" mode="M28" priority="1000">
+<xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true']/ram:CategoryTradeTax[ram:CategoryCode = 'E']" mode="M26" priority="1000">
     <svrl:fired-rule context="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true']/ram:CategoryTradeTax[ram:CategoryCode = 'E']"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -1711,18 +1625,18 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M28" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M26" select="@*|*"></xsl:apply-templates>
   </xsl:template>
-  <xsl:template match="text()" mode="M28" priority="-1"></xsl:template>
-  <xsl:template match="@*|node()" mode="M28" priority="-2">
-    <xsl:apply-templates mode="M28" select="@*|*"></xsl:apply-templates>
+  <xsl:template match="text()" mode="M26" priority="-1"></xsl:template>
+  <xsl:template match="@*|node()" mode="M26" priority="-2">
+    <xsl:apply-templates mode="M26" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 <!--PATTERN -->
 
 
 	<!--RULE -->
-<xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true']/ram:CategoryTradeTax[ram:CategoryCode = 'G']" mode="M29" priority="1000">
+<xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true']/ram:CategoryTradeTax[ram:CategoryCode = 'G']" mode="M27" priority="1000">
     <svrl:fired-rule context="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true']/ram:CategoryTradeTax[ram:CategoryCode = 'G']"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -1754,18 +1668,18 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M29" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M27" select="@*|*"></xsl:apply-templates>
   </xsl:template>
-  <xsl:template match="text()" mode="M29" priority="-1"></xsl:template>
-  <xsl:template match="@*|node()" mode="M29" priority="-2">
-    <xsl:apply-templates mode="M29" select="@*|*"></xsl:apply-templates>
+  <xsl:template match="text()" mode="M27" priority="-1"></xsl:template>
+  <xsl:template match="@*|node()" mode="M27" priority="-2">
+    <xsl:apply-templates mode="M27" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 <!--PATTERN -->
 
 
 	<!--RULE -->
-<xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true']/ram:CategoryTradeTax[ram:CategoryCode = 'K']" mode="M30" priority="1000">
+<xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true']/ram:CategoryTradeTax[ram:CategoryCode = 'K']" mode="M28" priority="1000">
     <svrl:fired-rule context="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true']/ram:CategoryTradeTax[ram:CategoryCode = 'K']"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -1797,18 +1711,18 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M30" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M28" select="@*|*"></xsl:apply-templates>
   </xsl:template>
-  <xsl:template match="text()" mode="M30" priority="-1"></xsl:template>
-  <xsl:template match="@*|node()" mode="M30" priority="-2">
-    <xsl:apply-templates mode="M30" select="@*|*"></xsl:apply-templates>
+  <xsl:template match="text()" mode="M28" priority="-1"></xsl:template>
+  <xsl:template match="@*|node()" mode="M28" priority="-2">
+    <xsl:apply-templates mode="M28" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 <!--PATTERN -->
 
 
 	<!--RULE -->
-<xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true']/ram:CategoryTradeTax[ram:CategoryCode = 'L']" mode="M31" priority="1000">
+<xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true']/ram:CategoryTradeTax[ram:CategoryCode = 'L']" mode="M29" priority="1000">
     <svrl:fired-rule context="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true']/ram:CategoryTradeTax[ram:CategoryCode = 'L']"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -1840,18 +1754,18 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M31" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M29" select="@*|*"></xsl:apply-templates>
   </xsl:template>
-  <xsl:template match="text()" mode="M31" priority="-1"></xsl:template>
-  <xsl:template match="@*|node()" mode="M31" priority="-2">
-    <xsl:apply-templates mode="M31" select="@*|*"></xsl:apply-templates>
+  <xsl:template match="text()" mode="M29" priority="-1"></xsl:template>
+  <xsl:template match="@*|node()" mode="M29" priority="-2">
+    <xsl:apply-templates mode="M29" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 <!--PATTERN -->
 
 
 	<!--RULE -->
-<xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true']/ram:CategoryTradeTax[ram:CategoryCode = 'M']" mode="M32" priority="1000">
+<xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true']/ram:CategoryTradeTax[ram:CategoryCode = 'M']" mode="M30" priority="1000">
     <svrl:fired-rule context="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true']/ram:CategoryTradeTax[ram:CategoryCode = 'M']"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -1883,18 +1797,18 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M32" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M30" select="@*|*"></xsl:apply-templates>
   </xsl:template>
-  <xsl:template match="text()" mode="M32" priority="-1"></xsl:template>
-  <xsl:template match="@*|node()" mode="M32" priority="-2">
-    <xsl:apply-templates mode="M32" select="@*|*"></xsl:apply-templates>
+  <xsl:template match="text()" mode="M30" priority="-1"></xsl:template>
+  <xsl:template match="@*|node()" mode="M30" priority="-2">
+    <xsl:apply-templates mode="M30" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 <!--PATTERN -->
 
 
 	<!--RULE -->
-<xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true']/ram:CategoryTradeTax[ram:CategoryCode = 'O']" mode="M33" priority="1000">
+<xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true']/ram:CategoryTradeTax[ram:CategoryCode = 'O']" mode="M31" priority="1000">
     <svrl:fired-rule context="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true']/ram:CategoryTradeTax[ram:CategoryCode = 'O']"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -1926,18 +1840,18 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M33" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M31" select="@*|*"></xsl:apply-templates>
   </xsl:template>
-  <xsl:template match="text()" mode="M33" priority="-1"></xsl:template>
-  <xsl:template match="@*|node()" mode="M33" priority="-2">
-    <xsl:apply-templates mode="M33" select="@*|*"></xsl:apply-templates>
+  <xsl:template match="text()" mode="M31" priority="-1"></xsl:template>
+  <xsl:template match="@*|node()" mode="M31" priority="-2">
+    <xsl:apply-templates mode="M31" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 <!--PATTERN -->
 
 
 	<!--RULE -->
-<xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true']/ram:CategoryTradeTax[ram:CategoryCode = 'S']" mode="M34" priority="1000">
+<xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true']/ram:CategoryTradeTax[ram:CategoryCode = 'S']" mode="M32" priority="1000">
     <svrl:fired-rule context="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true']/ram:CategoryTradeTax[ram:CategoryCode = 'S']"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -1969,18 +1883,18 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M34" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M32" select="@*|*"></xsl:apply-templates>
   </xsl:template>
-  <xsl:template match="text()" mode="M34" priority="-1"></xsl:template>
-  <xsl:template match="@*|node()" mode="M34" priority="-2">
-    <xsl:apply-templates mode="M34" select="@*|*"></xsl:apply-templates>
+  <xsl:template match="text()" mode="M32" priority="-1"></xsl:template>
+  <xsl:template match="@*|node()" mode="M32" priority="-2">
+    <xsl:apply-templates mode="M32" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 <!--PATTERN -->
 
 
 	<!--RULE -->
-<xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true']/ram:CategoryTradeTax[ram:CategoryCode = 'Z']" mode="M35" priority="1000">
+<xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true']/ram:CategoryTradeTax[ram:CategoryCode = 'Z']" mode="M33" priority="1000">
     <svrl:fired-rule context="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true']/ram:CategoryTradeTax[ram:CategoryCode = 'Z']"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -2012,18 +1926,18 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M35" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M33" select="@*|*"></xsl:apply-templates>
   </xsl:template>
-  <xsl:template match="text()" mode="M35" priority="-1"></xsl:template>
-  <xsl:template match="@*|node()" mode="M35" priority="-2">
-    <xsl:apply-templates mode="M35" select="@*|*"></xsl:apply-templates>
+  <xsl:template match="text()" mode="M33" priority="-1"></xsl:template>
+  <xsl:template match="@*|node()" mode="M33" priority="-2">
+    <xsl:apply-templates mode="M33" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 <!--PATTERN -->
 
 
 	<!--RULE -->
-<xsl:template match="//ram:SpecifiedTradeSettlementHeaderMonetarySummation" mode="M36" priority="1000">
+<xsl:template match="//ram:SpecifiedTradeSettlementHeaderMonetarySummation" mode="M34" priority="1000">
     <svrl:fired-rule context="//ram:SpecifiedTradeSettlementHeaderMonetarySummation"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -2325,18 +2239,18 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M36" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M34" select="@*|*"></xsl:apply-templates>
   </xsl:template>
-  <xsl:template match="text()" mode="M36" priority="-1"></xsl:template>
-  <xsl:template match="@*|node()" mode="M36" priority="-2">
-    <xsl:apply-templates mode="M36" select="@*|*"></xsl:apply-templates>
+  <xsl:template match="text()" mode="M34" priority="-1"></xsl:template>
+  <xsl:template match="@*|node()" mode="M34" priority="-2">
+    <xsl:apply-templates mode="M34" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 <!--PATTERN -->
 
 
 	<!--RULE -->
-<xsl:template match="//ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:TaxTotalAmount[@currencyID=/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:InvoiceCurrencyCode]" mode="M37" priority="1000">
+<xsl:template match="//ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:TaxTotalAmount[@currencyID=/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:InvoiceCurrencyCode]" mode="M35" priority="1000">
     <svrl:fired-rule context="//ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:TaxTotalAmount[@currencyID=/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:InvoiceCurrencyCode]"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -2353,18 +2267,18 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M37" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M35" select="@*|*"></xsl:apply-templates>
   </xsl:template>
-  <xsl:template match="text()" mode="M37" priority="-1"></xsl:template>
-  <xsl:template match="@*|node()" mode="M37" priority="-2">
-    <xsl:apply-templates mode="M37" select="@*|*"></xsl:apply-templates>
+  <xsl:template match="text()" mode="M35" priority="-1"></xsl:template>
+  <xsl:template match="@*|node()" mode="M35" priority="-2">
+    <xsl:apply-templates mode="M35" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 <!--PATTERN -->
 
 
 	<!--RULE -->
-<xsl:template match="//ram:SpecifiedTradeSettlementPaymentMeans" mode="M38" priority="1000">
+<xsl:template match="//ram:SpecifiedTradeSettlementPaymentMeans" mode="M36" priority="1000">
     <svrl:fired-rule context="//ram:SpecifiedTradeSettlementPaymentMeans"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -2396,18 +2310,18 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M38" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M36" select="@*|*"></xsl:apply-templates>
   </xsl:template>
-  <xsl:template match="text()" mode="M38" priority="-1"></xsl:template>
-  <xsl:template match="@*|node()" mode="M38" priority="-2">
-    <xsl:apply-templates mode="M38" select="@*|*"></xsl:apply-templates>
+  <xsl:template match="text()" mode="M36" priority="-1"></xsl:template>
+  <xsl:template match="@*|node()" mode="M36" priority="-2">
+    <xsl:apply-templates mode="M36" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 <!--PATTERN -->
 
 
 	<!--RULE -->
-<xsl:template match="//ram:SpecifiedTradeSettlementPaymentMeans[ram:TypeCode='30' or ram:TypeCode='58']/ram:PayeePartyCreditorFinancialAccount" mode="M39" priority="1000">
+<xsl:template match="//ram:SpecifiedTradeSettlementPaymentMeans[ram:TypeCode='30' or ram:TypeCode='58']/ram:PayeePartyCreditorFinancialAccount" mode="M37" priority="1000">
     <svrl:fired-rule context="//ram:SpecifiedTradeSettlementPaymentMeans[ram:TypeCode='30' or ram:TypeCode='58']/ram:PayeePartyCreditorFinancialAccount"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -2439,18 +2353,18 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M39" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M37" select="@*|*"></xsl:apply-templates>
   </xsl:template>
-  <xsl:template match="text()" mode="M39" priority="-1"></xsl:template>
-  <xsl:template match="@*|node()" mode="M39" priority="-2">
-    <xsl:apply-templates mode="M39" select="@*|*"></xsl:apply-templates>
+  <xsl:template match="text()" mode="M37" priority="-1"></xsl:template>
+  <xsl:template match="@*|node()" mode="M37" priority="-2">
+    <xsl:apply-templates mode="M37" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 <!--PATTERN -->
 
 
 	<!--RULE -->
-<xsl:template match="//ram:SpecifiedTradeSettlementPaymentMeans[some $code in tokenize('30 58', '\s')  satisfies normalize-space(ram:TypeCode) = $code]" mode="M40" priority="1000">
+<xsl:template match="//ram:SpecifiedTradeSettlementPaymentMeans[some $code in tokenize('30 58', '\s')  satisfies normalize-space(ram:TypeCode) = $code]" mode="M38" priority="1000">
     <svrl:fired-rule context="//ram:SpecifiedTradeSettlementPaymentMeans[some $code in tokenize('30 58', '\s')  satisfies normalize-space(ram:TypeCode) = $code]"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -2467,18 +2381,18 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M40" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M38" select="@*|*"></xsl:apply-templates>
   </xsl:template>
-  <xsl:template match="text()" mode="M40" priority="-1"></xsl:template>
-  <xsl:template match="@*|node()" mode="M40" priority="-2">
-    <xsl:apply-templates mode="M40" select="@*|*"></xsl:apply-templates>
+  <xsl:template match="text()" mode="M38" priority="-1"></xsl:template>
+  <xsl:template match="@*|node()" mode="M38" priority="-2">
+    <xsl:apply-templates mode="M38" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 <!--PATTERN -->
 
 
 	<!--RULE -->
-<xsl:template match="//rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode[. = 'AE']" mode="M41" priority="1000">
+<xsl:template match="//rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode[. = 'AE']" mode="M39" priority="1000">
     <svrl:fired-rule context="//rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode[. = 'AE']"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -2510,18 +2424,18 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M41" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M39" select="@*|*"></xsl:apply-templates>
   </xsl:template>
-  <xsl:template match="text()" mode="M41" priority="-1"></xsl:template>
-  <xsl:template match="@*|node()" mode="M41" priority="-2">
-    <xsl:apply-templates mode="M41" select="@*|*"></xsl:apply-templates>
+  <xsl:template match="text()" mode="M39" priority="-1"></xsl:template>
+  <xsl:template match="@*|node()" mode="M39" priority="-2">
+    <xsl:apply-templates mode="M39" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 <!--PATTERN -->
 
 
 	<!--RULE -->
-<xsl:template match="//rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode[. = 'E']" mode="M42" priority="1000">
+<xsl:template match="//rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode[. = 'E']" mode="M40" priority="1000">
     <svrl:fired-rule context="//rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode[. = 'E']"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -2553,18 +2467,18 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M42" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M40" select="@*|*"></xsl:apply-templates>
   </xsl:template>
-  <xsl:template match="text()" mode="M42" priority="-1"></xsl:template>
-  <xsl:template match="@*|node()" mode="M42" priority="-2">
-    <xsl:apply-templates mode="M42" select="@*|*"></xsl:apply-templates>
+  <xsl:template match="text()" mode="M40" priority="-1"></xsl:template>
+  <xsl:template match="@*|node()" mode="M40" priority="-2">
+    <xsl:apply-templates mode="M40" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 <!--PATTERN -->
 
 
 	<!--RULE -->
-<xsl:template match="//rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode[. = 'G']" mode="M43" priority="1000">
+<xsl:template match="//rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode[. = 'G']" mode="M41" priority="1000">
     <svrl:fired-rule context="//rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode[. = 'G']"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -2596,18 +2510,18 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M43" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M41" select="@*|*"></xsl:apply-templates>
   </xsl:template>
-  <xsl:template match="text()" mode="M43" priority="-1"></xsl:template>
-  <xsl:template match="@*|node()" mode="M43" priority="-2">
-    <xsl:apply-templates mode="M43" select="@*|*"></xsl:apply-templates>
+  <xsl:template match="text()" mode="M41" priority="-1"></xsl:template>
+  <xsl:template match="@*|node()" mode="M41" priority="-2">
+    <xsl:apply-templates mode="M41" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 <!--PATTERN -->
 
 
 	<!--RULE -->
-<xsl:template match="//rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode[.= 'K']" mode="M44" priority="1000">
+<xsl:template match="//rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode[.= 'K']" mode="M42" priority="1000">
     <svrl:fired-rule context="//rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode[.= 'K']"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -2669,18 +2583,18 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M44" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M42" select="@*|*"></xsl:apply-templates>
   </xsl:template>
-  <xsl:template match="text()" mode="M44" priority="-1"></xsl:template>
-  <xsl:template match="@*|node()" mode="M44" priority="-2">
-    <xsl:apply-templates mode="M44" select="@*|*"></xsl:apply-templates>
+  <xsl:template match="text()" mode="M42" priority="-1"></xsl:template>
+  <xsl:template match="@*|node()" mode="M42" priority="-2">
+    <xsl:apply-templates mode="M42" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 <!--PATTERN -->
 
 
 	<!--RULE -->
-<xsl:template match="//rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode = 'L']" mode="M45" priority="1000">
+<xsl:template match="//rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode = 'L']" mode="M43" priority="1000">
     <svrl:fired-rule context="//rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode = 'L']"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -2712,18 +2626,18 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M45" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M43" select="@*|*"></xsl:apply-templates>
   </xsl:template>
-  <xsl:template match="text()" mode="M45" priority="-1"></xsl:template>
-  <xsl:template match="@*|node()" mode="M45" priority="-2">
-    <xsl:apply-templates mode="M45" select="@*|*"></xsl:apply-templates>
+  <xsl:template match="text()" mode="M43" priority="-1"></xsl:template>
+  <xsl:template match="@*|node()" mode="M43" priority="-2">
+    <xsl:apply-templates mode="M43" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 <!--PATTERN -->
 
 
 	<!--RULE -->
-<xsl:template match="//rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode = 'M']" mode="M46" priority="1000">
+<xsl:template match="//rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode = 'M']" mode="M44" priority="1000">
     <svrl:fired-rule context="//rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode = 'M']"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -2755,18 +2669,18 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M46" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M44" select="@*|*"></xsl:apply-templates>
   </xsl:template>
-  <xsl:template match="text()" mode="M46" priority="-1"></xsl:template>
-  <xsl:template match="@*|node()" mode="M46" priority="-2">
-    <xsl:apply-templates mode="M46" select="@*|*"></xsl:apply-templates>
+  <xsl:template match="text()" mode="M44" priority="-1"></xsl:template>
+  <xsl:template match="@*|node()" mode="M44" priority="-2">
+    <xsl:apply-templates mode="M44" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 <!--PATTERN -->
 
 
 	<!--RULE -->
-<xsl:template match="//rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode = 'O']" mode="M47" priority="1000">
+<xsl:template match="//rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode = 'O']" mode="M45" priority="1000">
     <svrl:fired-rule context="//rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode = 'O']"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -2843,18 +2757,18 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M47" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M45" select="@*|*"></xsl:apply-templates>
   </xsl:template>
-  <xsl:template match="text()" mode="M47" priority="-1"></xsl:template>
-  <xsl:template match="@*|node()" mode="M47" priority="-2">
-    <xsl:apply-templates mode="M47" select="@*|*"></xsl:apply-templates>
+  <xsl:template match="text()" mode="M45" priority="-1"></xsl:template>
+  <xsl:template match="@*|node()" mode="M45" priority="-2">
+    <xsl:apply-templates mode="M45" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 <!--PATTERN -->
 
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice" mode="M48" priority="1000">
+<xsl:template match="/rsm:CrossIndustryInvoice" mode="M46" priority="1000">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -3051,18 +2965,18 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M48" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M46" select="@*|*"></xsl:apply-templates>
   </xsl:template>
-  <xsl:template match="text()" mode="M48" priority="-1"></xsl:template>
-  <xsl:template match="@*|node()" mode="M48" priority="-2">
-    <xsl:apply-templates mode="M48" select="@*|*"></xsl:apply-templates>
+  <xsl:template match="text()" mode="M46" priority="-1"></xsl:template>
+  <xsl:template match="@*|node()" mode="M46" priority="-2">
+    <xsl:apply-templates mode="M46" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 <!--PATTERN -->
 
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement" mode="M49" priority="1000">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement" mode="M47" priority="1000">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -3124,18 +3038,18 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M49" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M47" select="@*|*"></xsl:apply-templates>
   </xsl:template>
-  <xsl:template match="text()" mode="M49" priority="-1"></xsl:template>
-  <xsl:template match="@*|node()" mode="M49" priority="-2">
-    <xsl:apply-templates mode="M49" select="@*|*"></xsl:apply-templates>
+  <xsl:template match="text()" mode="M47" priority="-1"></xsl:template>
+  <xsl:template match="@*|node()" mode="M47" priority="-2">
+    <xsl:apply-templates mode="M47" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 <!--PATTERN -->
 
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery" mode="M50" priority="1000">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery" mode="M48" priority="1000">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -3152,18 +3066,18 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M48" select="@*|*"></xsl:apply-templates>
   </xsl:template>
-  <xsl:template match="text()" mode="M50" priority="-1"></xsl:template>
-  <xsl:template match="@*|node()" mode="M50" priority="-2">
-    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
+  <xsl:template match="text()" mode="M48" priority="-1"></xsl:template>
+  <xsl:template match="@*|node()" mode="M48" priority="-2">
+    <xsl:apply-templates mode="M48" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 <!--PATTERN -->
 
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:InvoiceReferencedDocument" mode="M51" priority="1000">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:InvoiceReferencedDocument" mode="M49" priority="1000">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:InvoiceReferencedDocument"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -3195,18 +3109,18 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M51" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M49" select="@*|*"></xsl:apply-templates>
   </xsl:template>
-  <xsl:template match="text()" mode="M51" priority="-1"></xsl:template>
-  <xsl:template match="@*|node()" mode="M51" priority="-2">
-    <xsl:apply-templates mode="M51" select="@*|*"></xsl:apply-templates>
+  <xsl:template match="text()" mode="M49" priority="-1"></xsl:template>
+  <xsl:template match="@*|node()" mode="M49" priority="-2">
+    <xsl:apply-templates mode="M49" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 <!--PATTERN -->
 
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:ExchangedDocument" mode="M52" priority="1132">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:ExchangedDocument" mode="M50" priority="1132">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:ExchangedDocument"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -3238,11 +3152,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:ExchangedDocument/ram:ID" mode="M52" priority="1131">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:ExchangedDocument/ram:ID" mode="M50" priority="1131">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:ExchangedDocument/ram:ID"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -3255,11 +3169,11 @@
 	Attribute @schemeID' marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:ExchangedDocument/ram:IncludedNote" mode="M52" priority="1130">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:ExchangedDocument/ram:IncludedNote" mode="M50" priority="1130">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:ExchangedDocument/ram:IncludedNote"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -3291,11 +3205,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:ExchangedDocument/ram:IncludedNote/ram:SubjectCode" mode="M52" priority="1129">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:ExchangedDocument/ram:IncludedNote/ram:SubjectCode" mode="M50" priority="1129">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:ExchangedDocument/ram:IncludedNote/ram:SubjectCode"></svrl:fired-rule>
     <xsl:variable name="codeValue4" select="."></xsl:variable>
 
@@ -3313,11 +3227,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:ExchangedDocument/ram:IssueDateTime/udt:DateTimeString" mode="M52" priority="1128">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:ExchangedDocument/ram:IssueDateTime/udt:DateTimeString" mode="M50" priority="1128">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:ExchangedDocument/ram:IssueDateTime/udt:DateTimeString"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -3350,11 +3264,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:ExchangedDocument/ram:TypeCode" mode="M52" priority="1127">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:ExchangedDocument/ram:TypeCode" mode="M50" priority="1127">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:ExchangedDocument/ram:TypeCode"></svrl:fired-rule>
     <xsl:variable name="codeValue2" select="."></xsl:variable>
 
@@ -3372,11 +3286,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:ExchangedDocumentContext" mode="M52" priority="1126">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:ExchangedDocumentContext" mode="M50" priority="1126">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:ExchangedDocumentContext"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -3408,11 +3322,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:ExchangedDocumentContext/ram:BusinessProcessSpecifiedDocumentContextParameter" mode="M52" priority="1125">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:ExchangedDocumentContext/ram:BusinessProcessSpecifiedDocumentContextParameter" mode="M50" priority="1125">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:ExchangedDocumentContext/ram:BusinessProcessSpecifiedDocumentContextParameter"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -3429,11 +3343,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:ExchangedDocumentContext/ram:BusinessProcessSpecifiedDocumentContextParameter/ram:ID" mode="M52" priority="1124">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:ExchangedDocumentContext/ram:BusinessProcessSpecifiedDocumentContextParameter/ram:ID" mode="M50" priority="1124">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:ExchangedDocumentContext/ram:BusinessProcessSpecifiedDocumentContextParameter/ram:ID"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -3446,11 +3360,11 @@
 	Attribute @schemeID' marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:ExchangedDocumentContext/ram:GuidelineSpecifiedDocumentContextParameter" mode="M52" priority="1123">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:ExchangedDocumentContext/ram:GuidelineSpecifiedDocumentContextParameter" mode="M50" priority="1123">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:ExchangedDocumentContext/ram:GuidelineSpecifiedDocumentContextParameter"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -3467,11 +3381,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:ExchangedDocumentContext/ram:GuidelineSpecifiedDocumentContextParameter/ram:ID" mode="M52" priority="1122">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:ExchangedDocumentContext/ram:GuidelineSpecifiedDocumentContextParameter/ram:ID" mode="M50" priority="1122">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:ExchangedDocumentContext/ram:GuidelineSpecifiedDocumentContextParameter/ram:ID"></svrl:fired-rule>
     <xsl:variable name="codeValue1" select="."></xsl:variable>
 
@@ -3500,11 +3414,11 @@
 	Attribute @schemeID' marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerOrderReferencedDocument" mode="M52" priority="1121">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerOrderReferencedDocument" mode="M50" priority="1121">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerOrderReferencedDocument"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -3521,11 +3435,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerOrderReferencedDocument/ram:FormattedIssueDateTime" mode="M52" priority="1120">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerOrderReferencedDocument/ram:FormattedIssueDateTime" mode="M50" priority="1120">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerOrderReferencedDocument/ram:FormattedIssueDateTime"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -3538,11 +3452,11 @@
 	Element 'ram:FormattedIssueDateTime' is marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerOrderReferencedDocument/ram:IssuerAssignedID" mode="M52" priority="1119">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerOrderReferencedDocument/ram:IssuerAssignedID" mode="M50" priority="1119">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerOrderReferencedDocument/ram:IssuerAssignedID"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -3555,11 +3469,11 @@
 	Attribute @schemeID' marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerTradeParty" mode="M52" priority="1118">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerTradeParty" mode="M50" priority="1118">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerTradeParty"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -3651,11 +3565,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerTradeParty/ram:GlobalID" mode="M52" priority="1117">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerTradeParty/ram:GlobalID" mode="M50" priority="1117">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerTradeParty/ram:GlobalID"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -3688,11 +3602,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerTradeParty/ram:ID" mode="M52" priority="1116">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerTradeParty/ram:ID" mode="M50" priority="1116">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerTradeParty/ram:ID"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -3705,11 +3619,11 @@
 	Attribute @schemeID' marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerTradeParty/ram:PostalTradeAddress" mode="M52" priority="1115">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerTradeParty/ram:PostalTradeAddress" mode="M50" priority="1115">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerTradeParty/ram:PostalTradeAddress"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -3741,11 +3655,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerTradeParty/ram:PostalTradeAddress/ram:CountryID" mode="M52" priority="1114">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerTradeParty/ram:PostalTradeAddress/ram:CountryID" mode="M50" priority="1114">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerTradeParty/ram:PostalTradeAddress/ram:CountryID"></svrl:fired-rule>
     <xsl:variable name="codeValue7" select="."></xsl:variable>
 
@@ -3763,11 +3677,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerTradeParty/ram:SpecifiedLegalOrganization/ram:ID" mode="M52" priority="1113">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerTradeParty/ram:SpecifiedLegalOrganization/ram:ID" mode="M50" priority="1113">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerTradeParty/ram:SpecifiedLegalOrganization/ram:ID"></svrl:fired-rule>
     <xsl:variable name="codeValue6" select="@schemeID"></xsl:variable>
 
@@ -3785,11 +3699,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerTradeParty/ram:SpecifiedLegalOrganization/ram:TradingBusinessName" mode="M52" priority="1112">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerTradeParty/ram:SpecifiedLegalOrganization/ram:TradingBusinessName" mode="M50" priority="1112">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerTradeParty/ram:SpecifiedLegalOrganization/ram:TradingBusinessName"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -3802,11 +3716,11 @@
 	Element 'ram:TradingBusinessName' is marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerTradeParty/ram:SpecifiedTaxRegistration" mode="M52" priority="1111">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerTradeParty/ram:SpecifiedTaxRegistration" mode="M50" priority="1111">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerTradeParty/ram:SpecifiedTaxRegistration"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -3823,11 +3737,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerTradeParty/ram:SpecifiedTaxRegistration/ram:ID" mode="M52" priority="1110">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerTradeParty/ram:SpecifiedTaxRegistration/ram:ID" mode="M50" priority="1110">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerTradeParty/ram:SpecifiedTaxRegistration/ram:ID"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -3860,11 +3774,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerTradeParty/ram:URIUniversalCommunication" mode="M52" priority="1109">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerTradeParty/ram:URIUniversalCommunication" mode="M50" priority="1109">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerTradeParty/ram:URIUniversalCommunication"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -3881,11 +3795,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerTradeParty/ram:URIUniversalCommunication/ram:URIID" mode="M52" priority="1108">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerTradeParty/ram:URIUniversalCommunication/ram:URIID" mode="M50" priority="1108">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerTradeParty/ram:URIUniversalCommunication/ram:URIID"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -3918,11 +3832,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:ContractReferencedDocument" mode="M52" priority="1107">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:ContractReferencedDocument" mode="M50" priority="1107">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:ContractReferencedDocument"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -3939,11 +3853,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:ContractReferencedDocument/ram:FormattedIssueDateTime" mode="M52" priority="1106">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:ContractReferencedDocument/ram:FormattedIssueDateTime" mode="M50" priority="1106">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:ContractReferencedDocument/ram:FormattedIssueDateTime"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -3956,11 +3870,11 @@
 	Element 'ram:FormattedIssueDateTime' is marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:ContractReferencedDocument/ram:IssuerAssignedID" mode="M52" priority="1105">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:ContractReferencedDocument/ram:IssuerAssignedID" mode="M50" priority="1105">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:ContractReferencedDocument/ram:IssuerAssignedID"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -3973,11 +3887,11 @@
 	Attribute @schemeID' marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTaxRepresentativeTradeParty" mode="M52" priority="1104">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTaxRepresentativeTradeParty" mode="M50" priority="1104">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTaxRepresentativeTradeParty"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -4024,11 +3938,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTaxRepresentativeTradeParty/ram:GlobalID" mode="M52" priority="1103">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTaxRepresentativeTradeParty/ram:GlobalID" mode="M50" priority="1103">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTaxRepresentativeTradeParty/ram:GlobalID"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -4041,11 +3955,11 @@
 	Element 'ram:GlobalID' is marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTaxRepresentativeTradeParty/ram:ID" mode="M52" priority="1102">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTaxRepresentativeTradeParty/ram:ID" mode="M50" priority="1102">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTaxRepresentativeTradeParty/ram:ID"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -4058,11 +3972,11 @@
 	Element 'ram:ID' is marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTaxRepresentativeTradeParty/ram:PostalTradeAddress" mode="M52" priority="1101">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTaxRepresentativeTradeParty/ram:PostalTradeAddress" mode="M50" priority="1101">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTaxRepresentativeTradeParty/ram:PostalTradeAddress"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -4094,11 +4008,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTaxRepresentativeTradeParty/ram:PostalTradeAddress/ram:CountryID" mode="M52" priority="1100">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTaxRepresentativeTradeParty/ram:PostalTradeAddress/ram:CountryID" mode="M50" priority="1100">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTaxRepresentativeTradeParty/ram:PostalTradeAddress/ram:CountryID"></svrl:fired-rule>
     <xsl:variable name="codeValue7" select="."></xsl:variable>
 
@@ -4116,11 +4030,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTaxRepresentativeTradeParty/ram:SpecifiedLegalOrganization" mode="M52" priority="1099">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTaxRepresentativeTradeParty/ram:SpecifiedLegalOrganization" mode="M50" priority="1099">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTaxRepresentativeTradeParty/ram:SpecifiedLegalOrganization"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -4133,11 +4047,11 @@
 	Element 'ram:SpecifiedLegalOrganization' is marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTaxRepresentativeTradeParty/ram:SpecifiedTaxRegistration" mode="M52" priority="1098">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTaxRepresentativeTradeParty/ram:SpecifiedTaxRegistration" mode="M50" priority="1098">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTaxRepresentativeTradeParty/ram:SpecifiedTaxRegistration"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -4154,11 +4068,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTaxRepresentativeTradeParty/ram:SpecifiedTaxRegistration/ram:ID" mode="M52" priority="1097">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTaxRepresentativeTradeParty/ram:SpecifiedTaxRegistration/ram:ID" mode="M50" priority="1097">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTaxRepresentativeTradeParty/ram:SpecifiedTaxRegistration/ram:ID"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -4191,11 +4105,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTaxRepresentativeTradeParty/ram:URIUniversalCommunication" mode="M52" priority="1096">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTaxRepresentativeTradeParty/ram:URIUniversalCommunication" mode="M50" priority="1096">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTaxRepresentativeTradeParty/ram:URIUniversalCommunication"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -4208,11 +4122,11 @@
 	Element 'ram:URIUniversalCommunication' is marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty" mode="M52" priority="1095">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty" mode="M50" priority="1095">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -4289,11 +4203,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty/ram:GlobalID" mode="M52" priority="1094">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty/ram:GlobalID" mode="M50" priority="1094">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty/ram:GlobalID"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -4326,11 +4240,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty/ram:ID" mode="M52" priority="1093">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty/ram:ID" mode="M50" priority="1093">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty/ram:ID"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -4343,11 +4257,11 @@
 	Attribute @schemeID' marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty/ram:PostalTradeAddress" mode="M52" priority="1092">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty/ram:PostalTradeAddress" mode="M50" priority="1092">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty/ram:PostalTradeAddress"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -4379,11 +4293,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty/ram:PostalTradeAddress/ram:CountryID" mode="M52" priority="1091">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty/ram:PostalTradeAddress/ram:CountryID" mode="M50" priority="1091">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty/ram:PostalTradeAddress/ram:CountryID"></svrl:fired-rule>
     <xsl:variable name="codeValue7" select="."></xsl:variable>
 
@@ -4401,11 +4315,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty/ram:SpecifiedLegalOrganization/ram:ID" mode="M52" priority="1090">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty/ram:SpecifiedLegalOrganization/ram:ID" mode="M50" priority="1090">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty/ram:SpecifiedLegalOrganization/ram:ID"></svrl:fired-rule>
     <xsl:variable name="codeValue6" select="@schemeID"></xsl:variable>
 
@@ -4423,11 +4337,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty/ram:SpecifiedTaxRegistration[ not(ram:ID/@schemeID=&quot;VA&quot;) and  not(ram:ID/@schemeID=&quot;FC&quot;)]" mode="M52" priority="1089">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty/ram:SpecifiedTaxRegistration[ not(ram:ID/@schemeID=&quot;VA&quot;) and  not(ram:ID/@schemeID=&quot;FC&quot;)]" mode="M50" priority="1089">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty/ram:SpecifiedTaxRegistration[ not(ram:ID/@schemeID=&quot;VA&quot;) and  not(ram:ID/@schemeID=&quot;FC&quot;)]"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -4440,11 +4354,11 @@
 	Element variant 'ram:SpecifiedTaxRegistration[ not(ram:ID/@schemeID="VA") and  not(ram:ID/@schemeID="FC")]' is marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty/ram:SpecifiedTaxRegistration[ram:ID/@schemeID=&quot;FC&quot;]" mode="M52" priority="1088">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty/ram:SpecifiedTaxRegistration[ram:ID/@schemeID=&quot;FC&quot;]" mode="M50" priority="1088">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty/ram:SpecifiedTaxRegistration[ram:ID/@schemeID=&quot;FC&quot;]"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -4461,11 +4375,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty/ram:SpecifiedTaxRegistration[ram:ID/@schemeID=&quot;FC&quot;]/ram:ID" mode="M52" priority="1087">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty/ram:SpecifiedTaxRegistration[ram:ID/@schemeID=&quot;FC&quot;]/ram:ID" mode="M50" priority="1087">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty/ram:SpecifiedTaxRegistration[ram:ID/@schemeID=&quot;FC&quot;]/ram:ID"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -4482,11 +4396,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty/ram:SpecifiedTaxRegistration[ram:ID/@schemeID=&quot;VA&quot;]" mode="M52" priority="1086">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty/ram:SpecifiedTaxRegistration[ram:ID/@schemeID=&quot;VA&quot;]" mode="M50" priority="1086">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty/ram:SpecifiedTaxRegistration[ram:ID/@schemeID=&quot;VA&quot;]"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -4503,11 +4417,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty/ram:SpecifiedTaxRegistration[ram:ID/@schemeID=&quot;VA&quot;]/ram:ID" mode="M52" priority="1085">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty/ram:SpecifiedTaxRegistration[ram:ID/@schemeID=&quot;VA&quot;]/ram:ID" mode="M50" priority="1085">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty/ram:SpecifiedTaxRegistration[ram:ID/@schemeID=&quot;VA&quot;]/ram:ID"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -4524,11 +4438,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty/ram:URIUniversalCommunication" mode="M52" priority="1084">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty/ram:URIUniversalCommunication" mode="M50" priority="1084">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty/ram:URIUniversalCommunication"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -4545,11 +4459,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty/ram:URIUniversalCommunication/ram:URIID" mode="M52" priority="1083">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty/ram:URIUniversalCommunication/ram:URIID" mode="M50" priority="1083">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty/ram:URIUniversalCommunication/ram:URIID"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -4582,11 +4496,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:ActualDeliverySupplyChainEvent" mode="M52" priority="1082">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:ActualDeliverySupplyChainEvent" mode="M50" priority="1082">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:ActualDeliverySupplyChainEvent"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -4603,11 +4517,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:ActualDeliverySupplyChainEvent/ram:OccurrenceDateTime/udt:DateTimeString" mode="M52" priority="1081">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:ActualDeliverySupplyChainEvent/ram:OccurrenceDateTime/udt:DateTimeString" mode="M50" priority="1081">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:ActualDeliverySupplyChainEvent/ram:OccurrenceDateTime/udt:DateTimeString"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -4640,11 +4554,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:DespatchAdviceReferencedDocument" mode="M52" priority="1080">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:DespatchAdviceReferencedDocument" mode="M50" priority="1080">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:DespatchAdviceReferencedDocument"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -4661,11 +4575,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:DespatchAdviceReferencedDocument/ram:FormattedIssueDateTime" mode="M52" priority="1079">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:DespatchAdviceReferencedDocument/ram:FormattedIssueDateTime" mode="M50" priority="1079">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:DespatchAdviceReferencedDocument/ram:FormattedIssueDateTime"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -4678,11 +4592,11 @@
 	Element 'ram:FormattedIssueDateTime' is marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:DespatchAdviceReferencedDocument/ram:IssuerAssignedID" mode="M52" priority="1078">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:DespatchAdviceReferencedDocument/ram:IssuerAssignedID" mode="M50" priority="1078">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:DespatchAdviceReferencedDocument/ram:IssuerAssignedID"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -4695,11 +4609,11 @@
 	Attribute @schemeID' marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:ShipToTradeParty" mode="M52" priority="1077">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:ShipToTradeParty" mode="M50" priority="1077">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:ShipToTradeParty"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -4731,11 +4645,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:ShipToTradeParty/ram:GlobalID" mode="M52" priority="1076">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:ShipToTradeParty/ram:GlobalID" mode="M50" priority="1076">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:ShipToTradeParty/ram:GlobalID"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -4768,11 +4682,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:ShipToTradeParty/ram:ID" mode="M52" priority="1075">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:ShipToTradeParty/ram:ID" mode="M50" priority="1075">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:ShipToTradeParty/ram:ID"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -4785,11 +4699,11 @@
 	Attribute @schemeID' marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:ShipToTradeParty/ram:PostalTradeAddress" mode="M52" priority="1074">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:ShipToTradeParty/ram:PostalTradeAddress" mode="M50" priority="1074">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:ShipToTradeParty/ram:PostalTradeAddress"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -4821,11 +4735,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:ShipToTradeParty/ram:PostalTradeAddress/ram:CountryID" mode="M52" priority="1073">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:ShipToTradeParty/ram:PostalTradeAddress/ram:CountryID" mode="M50" priority="1073">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:ShipToTradeParty/ram:PostalTradeAddress/ram:CountryID"></svrl:fired-rule>
     <xsl:variable name="codeValue7" select="."></xsl:variable>
 
@@ -4843,11 +4757,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:ShipToTradeParty/ram:SpecifiedLegalOrganization" mode="M52" priority="1072">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:ShipToTradeParty/ram:SpecifiedLegalOrganization" mode="M50" priority="1072">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:ShipToTradeParty/ram:SpecifiedLegalOrganization"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -4860,11 +4774,11 @@
 	Element 'ram:SpecifiedLegalOrganization' is marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:ShipToTradeParty/ram:SpecifiedTaxRegistration" mode="M52" priority="1071">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:ShipToTradeParty/ram:SpecifiedTaxRegistration" mode="M50" priority="1071">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:ShipToTradeParty/ram:SpecifiedTaxRegistration"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -4877,11 +4791,11 @@
 	Element 'ram:SpecifiedTaxRegistration' is marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:ShipToTradeParty/ram:URIUniversalCommunication" mode="M52" priority="1070">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:ShipToTradeParty/ram:URIUniversalCommunication" mode="M50" priority="1070">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:ShipToTradeParty/ram:URIUniversalCommunication"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -4894,11 +4808,11 @@
 	Element 'ram:URIUniversalCommunication' is marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement" mode="M52" priority="1069">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement" mode="M50" priority="1069">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -4990,11 +4904,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax" mode="M52" priority="1068">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax" mode="M50" priority="1068">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -5056,11 +4970,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:BasisAmount" mode="M52" priority="1067">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:BasisAmount" mode="M50" priority="1067">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:BasisAmount"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -5073,11 +4987,11 @@
 	Attribute @currencyID' marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:CalculatedAmount" mode="M52" priority="1066">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:CalculatedAmount" mode="M50" priority="1066">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:CalculatedAmount"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -5090,11 +5004,11 @@
 	Attribute @currencyID' marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode" mode="M52" priority="1065">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode" mode="M50" priority="1065">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode"></svrl:fired-rule>
     <xsl:variable name="codeValue14" select="."></xsl:variable>
 
@@ -5112,11 +5026,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:DueDateTypeCode" mode="M52" priority="1064">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:DueDateTypeCode" mode="M50" priority="1064">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:DueDateTypeCode"></svrl:fired-rule>
     <xsl:variable name="codeValue16" select="."></xsl:variable>
 
@@ -5134,11 +5048,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:ExemptionReasonCode" mode="M52" priority="1063">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:ExemptionReasonCode" mode="M50" priority="1063">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:ExemptionReasonCode"></svrl:fired-rule>
     <xsl:variable name="codeValue15" select="."></xsl:variable>
 
@@ -5156,11 +5070,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:TypeCode" mode="M52" priority="1062">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:TypeCode" mode="M50" priority="1062">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:TypeCode"></svrl:fired-rule>
     <xsl:variable name="codeValue13" select="."></xsl:variable>
 
@@ -5178,11 +5092,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:BillingSpecifiedPeriod/ram:EndDateTime/udt:DateTimeString" mode="M52" priority="1061">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:BillingSpecifiedPeriod/ram:EndDateTime/udt:DateTimeString" mode="M50" priority="1061">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:BillingSpecifiedPeriod/ram:EndDateTime/udt:DateTimeString"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -5215,11 +5129,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:BillingSpecifiedPeriod/ram:StartDateTime/udt:DateTimeString" mode="M52" priority="1060">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:BillingSpecifiedPeriod/ram:StartDateTime/udt:DateTimeString" mode="M50" priority="1060">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:BillingSpecifiedPeriod/ram:StartDateTime/udt:DateTimeString"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -5252,11 +5166,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:CreditorReferenceID" mode="M52" priority="1059">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:CreditorReferenceID" mode="M50" priority="1059">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:CreditorReferenceID"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -5269,11 +5183,11 @@
 	Attribute @schemeID' marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:InvoiceCurrencyCode" mode="M52" priority="1058">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:InvoiceCurrencyCode" mode="M50" priority="1058">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:InvoiceCurrencyCode"></svrl:fired-rule>
     <xsl:variable name="codeValue11" select="."></xsl:variable>
 
@@ -5291,11 +5205,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:InvoiceReferencedDocument/ram:FormattedIssueDateTime/qdt:DateTimeString" mode="M52" priority="1057">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:InvoiceReferencedDocument/ram:FormattedIssueDateTime/qdt:DateTimeString" mode="M50" priority="1057">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:InvoiceReferencedDocument/ram:FormattedIssueDateTime/qdt:DateTimeString"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -5328,11 +5242,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:InvoiceReferencedDocument/ram:IssuerAssignedID" mode="M52" priority="1056">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:InvoiceReferencedDocument/ram:IssuerAssignedID" mode="M50" priority="1056">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:InvoiceReferencedDocument/ram:IssuerAssignedID"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -5345,11 +5259,11 @@
 	Attribute @schemeID' marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:PayeeTradeParty" mode="M52" priority="1055">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:PayeeTradeParty" mode="M50" priority="1055">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:PayeeTradeParty"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -5396,11 +5310,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:PayeeTradeParty/ram:GlobalID" mode="M52" priority="1054">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:PayeeTradeParty/ram:GlobalID" mode="M50" priority="1054">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:PayeeTradeParty/ram:GlobalID"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -5433,11 +5347,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:PayeeTradeParty/ram:ID" mode="M52" priority="1053">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:PayeeTradeParty/ram:ID" mode="M50" priority="1053">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:PayeeTradeParty/ram:ID"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -5450,11 +5364,11 @@
 	Attribute @schemeID' marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:PayeeTradeParty/ram:PostalTradeAddress" mode="M52" priority="1052">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:PayeeTradeParty/ram:PostalTradeAddress" mode="M50" priority="1052">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:PayeeTradeParty/ram:PostalTradeAddress"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -5467,11 +5381,11 @@
 	Element 'ram:PostalTradeAddress' is marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:PayeeTradeParty/ram:SpecifiedLegalOrganization/ram:ID" mode="M52" priority="1051">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:PayeeTradeParty/ram:SpecifiedLegalOrganization/ram:ID" mode="M50" priority="1051">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:PayeeTradeParty/ram:SpecifiedLegalOrganization/ram:ID"></svrl:fired-rule>
     <xsl:variable name="codeValue6" select="@schemeID"></xsl:variable>
 
@@ -5489,11 +5403,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:PayeeTradeParty/ram:SpecifiedLegalOrganization/ram:TradingBusinessName" mode="M52" priority="1050">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:PayeeTradeParty/ram:SpecifiedLegalOrganization/ram:TradingBusinessName" mode="M50" priority="1050">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:PayeeTradeParty/ram:SpecifiedLegalOrganization/ram:TradingBusinessName"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -5506,11 +5420,11 @@
 	Element 'ram:TradingBusinessName' is marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:PayeeTradeParty/ram:SpecifiedTaxRegistration" mode="M52" priority="1049">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:PayeeTradeParty/ram:SpecifiedTaxRegistration" mode="M50" priority="1049">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:PayeeTradeParty/ram:SpecifiedTaxRegistration"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -5523,11 +5437,11 @@
 	Element 'ram:SpecifiedTaxRegistration' is marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:PayeeTradeParty/ram:URIUniversalCommunication" mode="M52" priority="1048">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:PayeeTradeParty/ram:URIUniversalCommunication" mode="M50" priority="1048">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:PayeeTradeParty/ram:URIUniversalCommunication"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -5540,11 +5454,11 @@
 	Element 'ram:URIUniversalCommunication' is marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ReceivableSpecifiedTradeAccountingAccount/ram:ID" mode="M52" priority="1047">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ReceivableSpecifiedTradeAccountingAccount/ram:ID" mode="M50" priority="1047">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ReceivableSpecifiedTradeAccountingAccount/ram:ID"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -5557,11 +5471,11 @@
 	Attribute @schemeID' marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ not(ram:ChargeIndicator/udt:Indicator=&quot;false&quot;) and  not(ram:ChargeIndicator/udt:Indicator=&quot;true&quot;)]" mode="M52" priority="1046">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ not(ram:ChargeIndicator/udt:Indicator=&quot;false&quot;) and  not(ram:ChargeIndicator/udt:Indicator=&quot;true&quot;)]" mode="M50" priority="1046">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ not(ram:ChargeIndicator/udt:Indicator=&quot;false&quot;) and  not(ram:ChargeIndicator/udt:Indicator=&quot;true&quot;)]"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -5574,11 +5488,11 @@
 	Element variant 'ram:SpecifiedTradeAllowanceCharge[ not(ram:ChargeIndicator/udt:Indicator="false") and  not(ram:ChargeIndicator/udt:Indicator="true")]' is marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;false&quot;]" mode="M52" priority="1045">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;false&quot;]" mode="M50" priority="1045">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;false&quot;]"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -5625,11 +5539,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;false&quot;]/ram:ActualAmount" mode="M52" priority="1044">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;false&quot;]/ram:ActualAmount" mode="M50" priority="1044">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;false&quot;]/ram:ActualAmount"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -5642,11 +5556,11 @@
 	Attribute @currencyID' marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;false&quot;]/ram:BasisAmount" mode="M52" priority="1043">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;false&quot;]/ram:BasisAmount" mode="M50" priority="1043">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;false&quot;]/ram:BasisAmount"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -5659,11 +5573,11 @@
 	Attribute @currencyID' marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;false&quot;]/ram:CategoryTradeTax" mode="M52" priority="1042">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;false&quot;]/ram:CategoryTradeTax" mode="M50" priority="1042">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;false&quot;]/ram:CategoryTradeTax"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -5695,11 +5609,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;false&quot;]/ram:CategoryTradeTax/ram:BasisAmount" mode="M52" priority="1041">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;false&quot;]/ram:CategoryTradeTax/ram:BasisAmount" mode="M50" priority="1041">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;false&quot;]/ram:CategoryTradeTax/ram:BasisAmount"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -5712,11 +5626,11 @@
 	Element 'ram:BasisAmount' is marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;false&quot;]/ram:CategoryTradeTax/ram:CalculatedAmount" mode="M52" priority="1040">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;false&quot;]/ram:CategoryTradeTax/ram:CalculatedAmount" mode="M50" priority="1040">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;false&quot;]/ram:CategoryTradeTax/ram:CalculatedAmount"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -5729,11 +5643,11 @@
 	Element 'ram:CalculatedAmount' is marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;false&quot;]/ram:CategoryTradeTax/ram:CategoryCode" mode="M52" priority="1039">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;false&quot;]/ram:CategoryTradeTax/ram:CategoryCode" mode="M50" priority="1039">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;false&quot;]/ram:CategoryTradeTax/ram:CategoryCode"></svrl:fired-rule>
     <xsl:variable name="codeValue14" select="."></xsl:variable>
 
@@ -5751,11 +5665,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;false&quot;]/ram:CategoryTradeTax/ram:DueDateTypeCode" mode="M52" priority="1038">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;false&quot;]/ram:CategoryTradeTax/ram:DueDateTypeCode" mode="M50" priority="1038">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;false&quot;]/ram:CategoryTradeTax/ram:DueDateTypeCode"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -5768,11 +5682,11 @@
 	Element 'ram:DueDateTypeCode' is marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;false&quot;]/ram:CategoryTradeTax/ram:ExemptionReason" mode="M52" priority="1037">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;false&quot;]/ram:CategoryTradeTax/ram:ExemptionReason" mode="M50" priority="1037">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;false&quot;]/ram:CategoryTradeTax/ram:ExemptionReason"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -5785,11 +5699,11 @@
 	Element 'ram:ExemptionReason' is marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;false&quot;]/ram:CategoryTradeTax/ram:ExemptionReasonCode" mode="M52" priority="1036">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;false&quot;]/ram:CategoryTradeTax/ram:ExemptionReasonCode" mode="M50" priority="1036">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;false&quot;]/ram:CategoryTradeTax/ram:ExemptionReasonCode"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -5802,11 +5716,11 @@
 	Element 'ram:ExemptionReasonCode' is marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;false&quot;]/ram:CategoryTradeTax/ram:TypeCode" mode="M52" priority="1035">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;false&quot;]/ram:CategoryTradeTax/ram:TypeCode" mode="M50" priority="1035">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;false&quot;]/ram:CategoryTradeTax/ram:TypeCode"></svrl:fired-rule>
     <xsl:variable name="codeValue13" select="."></xsl:variable>
 
@@ -5824,11 +5738,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;false&quot;]/ram:ReasonCode" mode="M52" priority="1034">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;false&quot;]/ram:ReasonCode" mode="M50" priority="1034">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;false&quot;]/ram:ReasonCode"></svrl:fired-rule>
     <xsl:variable name="codeValue17" select="."></xsl:variable>
 
@@ -5846,11 +5760,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;true&quot;]" mode="M52" priority="1033">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;true&quot;]" mode="M50" priority="1033">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;true&quot;]"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -5897,11 +5811,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;true&quot;]/ram:ActualAmount" mode="M52" priority="1032">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;true&quot;]/ram:ActualAmount" mode="M50" priority="1032">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;true&quot;]/ram:ActualAmount"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -5914,11 +5828,11 @@
 	Attribute @currencyID' marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;true&quot;]/ram:BasisAmount" mode="M52" priority="1031">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;true&quot;]/ram:BasisAmount" mode="M50" priority="1031">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;true&quot;]/ram:BasisAmount"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -5931,11 +5845,11 @@
 	Attribute @currencyID' marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;true&quot;]/ram:CategoryTradeTax" mode="M52" priority="1030">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;true&quot;]/ram:CategoryTradeTax" mode="M50" priority="1030">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;true&quot;]/ram:CategoryTradeTax"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -5967,11 +5881,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;true&quot;]/ram:CategoryTradeTax/ram:BasisAmount" mode="M52" priority="1029">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;true&quot;]/ram:CategoryTradeTax/ram:BasisAmount" mode="M50" priority="1029">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;true&quot;]/ram:CategoryTradeTax/ram:BasisAmount"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -5984,11 +5898,11 @@
 	Element 'ram:BasisAmount' is marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;true&quot;]/ram:CategoryTradeTax/ram:CalculatedAmount" mode="M52" priority="1028">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;true&quot;]/ram:CategoryTradeTax/ram:CalculatedAmount" mode="M50" priority="1028">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;true&quot;]/ram:CategoryTradeTax/ram:CalculatedAmount"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -6001,11 +5915,11 @@
 	Element 'ram:CalculatedAmount' is marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;true&quot;]/ram:CategoryTradeTax/ram:CategoryCode" mode="M52" priority="1027">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;true&quot;]/ram:CategoryTradeTax/ram:CategoryCode" mode="M50" priority="1027">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;true&quot;]/ram:CategoryTradeTax/ram:CategoryCode"></svrl:fired-rule>
     <xsl:variable name="codeValue14" select="."></xsl:variable>
 
@@ -6023,11 +5937,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;true&quot;]/ram:CategoryTradeTax/ram:DueDateTypeCode" mode="M52" priority="1026">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;true&quot;]/ram:CategoryTradeTax/ram:DueDateTypeCode" mode="M50" priority="1026">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;true&quot;]/ram:CategoryTradeTax/ram:DueDateTypeCode"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -6040,11 +5954,11 @@
 	Element 'ram:DueDateTypeCode' is marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;true&quot;]/ram:CategoryTradeTax/ram:ExemptionReason" mode="M52" priority="1025">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;true&quot;]/ram:CategoryTradeTax/ram:ExemptionReason" mode="M50" priority="1025">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;true&quot;]/ram:CategoryTradeTax/ram:ExemptionReason"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -6057,11 +5971,11 @@
 	Element 'ram:ExemptionReason' is marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;true&quot;]/ram:CategoryTradeTax/ram:ExemptionReasonCode" mode="M52" priority="1024">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;true&quot;]/ram:CategoryTradeTax/ram:ExemptionReasonCode" mode="M50" priority="1024">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;true&quot;]/ram:CategoryTradeTax/ram:ExemptionReasonCode"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -6074,11 +5988,11 @@
 	Element 'ram:ExemptionReasonCode' is marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;true&quot;]/ram:CategoryTradeTax/ram:TypeCode" mode="M52" priority="1023">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;true&quot;]/ram:CategoryTradeTax/ram:TypeCode" mode="M50" priority="1023">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;true&quot;]/ram:CategoryTradeTax/ram:TypeCode"></svrl:fired-rule>
     <xsl:variable name="codeValue13" select="."></xsl:variable>
 
@@ -6096,11 +6010,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;true&quot;]/ram:ReasonCode[ not(not (@listID)) and  not(@listID=&quot;5153&quot;)]" mode="M52" priority="1022">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;true&quot;]/ram:ReasonCode[ not(not (@listID)) and  not(@listID=&quot;5153&quot;)]" mode="M50" priority="1022">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;true&quot;]/ram:ReasonCode[ not(not (@listID)) and  not(@listID=&quot;5153&quot;)]"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -6113,11 +6027,11 @@
 	Element variant 'ram:ReasonCode[ not(not (@listID)) and  not(@listID="5153")]' is marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;true&quot;]/ram:ReasonCode[not (@listID)]" mode="M52" priority="1021">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;true&quot;]/ram:ReasonCode[not (@listID)]" mode="M50" priority="1021">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=&quot;true&quot;]/ram:ReasonCode[not (@listID)]"></svrl:fired-rule>
     <xsl:variable name="codeValue18" select="."></xsl:variable>
 
@@ -6135,11 +6049,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradePaymentTerms" mode="M52" priority="1020">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradePaymentTerms" mode="M50" priority="1020">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradePaymentTerms"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -6171,11 +6085,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradePaymentTerms/ram:DirectDebitMandateID" mode="M52" priority="1019">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradePaymentTerms/ram:DirectDebitMandateID" mode="M50" priority="1019">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradePaymentTerms/ram:DirectDebitMandateID"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -6188,11 +6102,11 @@
 	Attribute @schemeID' marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradePaymentTerms/ram:DueDateDateTime/udt:DateTimeString" mode="M52" priority="1018">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradePaymentTerms/ram:DueDateDateTime/udt:DateTimeString" mode="M50" priority="1018">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradePaymentTerms/ram:DueDateDateTime/udt:DateTimeString"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -6225,11 +6139,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementHeaderMonetarySummation" mode="M52" priority="1017">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementHeaderMonetarySummation" mode="M50" priority="1017">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementHeaderMonetarySummation"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -6366,11 +6280,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:AllowanceTotalAmount" mode="M52" priority="1016">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:AllowanceTotalAmount" mode="M50" priority="1016">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:AllowanceTotalAmount"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -6383,11 +6297,11 @@
 	Attribute @currencyID' marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:ChargeTotalAmount" mode="M52" priority="1015">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:ChargeTotalAmount" mode="M50" priority="1015">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:ChargeTotalAmount"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -6400,11 +6314,11 @@
 	Attribute @currencyID' marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:DuePayableAmount" mode="M52" priority="1014">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:DuePayableAmount" mode="M50" priority="1014">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:DuePayableAmount"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -6417,11 +6331,11 @@
 	Attribute @currencyID' marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:GrandTotalAmount" mode="M52" priority="1013">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:GrandTotalAmount" mode="M50" priority="1013">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:GrandTotalAmount"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -6434,11 +6348,11 @@
 	Attribute @currencyID' marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:LineTotalAmount" mode="M52" priority="1012">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:LineTotalAmount" mode="M50" priority="1012">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:LineTotalAmount"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -6451,11 +6365,11 @@
 	Attribute @currencyID' marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:TaxBasisTotalAmount" mode="M52" priority="1011">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:TaxBasisTotalAmount" mode="M50" priority="1011">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:TaxBasisTotalAmount"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -6468,11 +6382,11 @@
 	Attribute @currencyID' marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:TaxTotalAmount[ not(@currencyID=../../ram:InvoiceCurrencyCode) and  not(@currencyID=../../ram:TaxCurrencyCode)]" mode="M52" priority="1010">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:TaxTotalAmount[ not(@currencyID=../../ram:InvoiceCurrencyCode) and  not(@currencyID=../../ram:TaxCurrencyCode)]" mode="M50" priority="1010">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:TaxTotalAmount[ not(@currencyID=../../ram:InvoiceCurrencyCode) and  not(@currencyID=../../ram:TaxCurrencyCode)]"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -6485,11 +6399,11 @@
 	Element variant 'ram:TaxTotalAmount[ not(@currencyID=../../ram:InvoiceCurrencyCode) and  not(@currencyID=../../ram:TaxCurrencyCode)]' is marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:TaxTotalAmount[@currencyID=../../ram:InvoiceCurrencyCode]" mode="M52" priority="1009">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:TaxTotalAmount[@currencyID=../../ram:InvoiceCurrencyCode]" mode="M50" priority="1009">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:TaxTotalAmount[@currencyID=../../ram:InvoiceCurrencyCode]"></svrl:fired-rule>
     <xsl:variable name="codeValue19" select="@currencyID"></xsl:variable>
 
@@ -6507,11 +6421,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:TaxTotalAmount[@currencyID=../../ram:TaxCurrencyCode]" mode="M52" priority="1008">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:TaxTotalAmount[@currencyID=../../ram:TaxCurrencyCode]" mode="M50" priority="1008">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:TaxTotalAmount[@currencyID=../../ram:TaxCurrencyCode]"></svrl:fired-rule>
     <xsl:variable name="codeValue20" select="@currencyID"></xsl:variable>
 
@@ -6529,11 +6443,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:TotalPrepaidAmount" mode="M52" priority="1007">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:TotalPrepaidAmount" mode="M50" priority="1007">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:TotalPrepaidAmount"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -6546,11 +6460,11 @@
 	Attribute @currencyID' marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans" mode="M52" priority="1006">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans" mode="M50" priority="1006">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -6582,11 +6496,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:PayeePartyCreditorFinancialAccount/ram:IBANID" mode="M52" priority="1005">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:PayeePartyCreditorFinancialAccount/ram:IBANID" mode="M50" priority="1005">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:PayeePartyCreditorFinancialAccount/ram:IBANID"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -6599,11 +6513,11 @@
 	Attribute @schemeID' marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:PayeePartyCreditorFinancialAccount/ram:ProprietaryID" mode="M52" priority="1004">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:PayeePartyCreditorFinancialAccount/ram:ProprietaryID" mode="M50" priority="1004">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:PayeePartyCreditorFinancialAccount/ram:ProprietaryID"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -6616,11 +6530,11 @@
 	Attribute @schemeID' marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:PayerPartyDebtorFinancialAccount" mode="M52" priority="1003">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:PayerPartyDebtorFinancialAccount" mode="M50" priority="1003">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:PayerPartyDebtorFinancialAccount"></svrl:fired-rule>
 
 		<!--ASSERT -->
@@ -6637,11 +6551,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:PayerPartyDebtorFinancialAccount/ram:IBANID" mode="M52" priority="1002">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:PayerPartyDebtorFinancialAccount/ram:IBANID" mode="M50" priority="1002">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:PayerPartyDebtorFinancialAccount/ram:IBANID"></svrl:fired-rule>
 
 		<!--REPORT -->
@@ -6654,11 +6568,11 @@
 	Attribute @schemeID' marked as not used in the given context.</svrl:text>
       </svrl:successful-report>
     </xsl:if>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:TypeCode" mode="M52" priority="1001">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:TypeCode" mode="M50" priority="1001">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementPaymentMeans/ram:TypeCode"></svrl:fired-rule>
     <xsl:variable name="codeValue12" select="."></xsl:variable>
 
@@ -6676,11 +6590,11 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:TaxCurrencyCode" mode="M52" priority="1000">
+<xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:TaxCurrencyCode" mode="M50" priority="1000">
     <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:TaxCurrencyCode"></svrl:fired-rule>
     <xsl:variable name="codeValue11" select="."></xsl:variable>
 
@@ -6698,10 +6612,10 @@
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
-  <xsl:template match="text()" mode="M52" priority="-1"></xsl:template>
-  <xsl:template match="@*|node()" mode="M52" priority="-2">
-    <xsl:apply-templates mode="M52" select="@*|*"></xsl:apply-templates>
+  <xsl:template match="text()" mode="M50" priority="-1"></xsl:template>
+  <xsl:template match="@*|node()" mode="M50" priority="-2">
+    <xsl:apply-templates mode="M50" select="@*|*"></xsl:apply-templates>
   </xsl:template>
 </xsl:stylesheet>
